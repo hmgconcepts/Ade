@@ -54,6 +54,7 @@ Your platform is pre-configured with the following modules:
 - **Subjects**
 - **Attendance**
 - **AI Question Prompts**
+- **Entrance & Assessments**
 - **Results / Scores**
 - **Certificates & Documents**
 - **Marketing Flyer**
@@ -93,22 +94,21 @@ Your platform is pre-configured with the following modules:
 - **Health / Clinic**
 - **Promotion / Graduation**
 - **Integrated LMS**
+- **Rewards & Badges (PBIS)**
 - **Career & Placement**
 - **Lesson Plans & Curriculum**
-- **Rewards & Badges (PBIS)**
 - **Behaviour & PBIS Points**
 - **Special Education / Support**
 - **Substitute / Cover**
-- **Entrance & Assessments**
 - **Admissions & Enrollment**
 - **Salary & Payslips**
 - **Payroll Register**
 - **Staff Loans & Advances**
 - **Staff Bonuses**
 - **Staff Appraisals**
+- **Hostel / Boarding**
 - **Alumni Network**
 - **Inventory & Assets**
-- **Hostel / Boarding**
 - **Custom Document Builder**
 - **Advanced Fleet GPS**
 - **Facility Booking**
@@ -117,11 +117,13 @@ Your platform is pre-configured with the following modules:
 - **In-App Inbox**
 - **Voting & Polls**
 - **PTA Meeting Scheduler**
-- **IT / Help Desk**
 - **Front Desk / Dispatch**
+- **IT / Help Desk**
 - **E-Resources / Notes**
-- **School Calendar**
+- **Birthdays**
+- **Reports & Export**
 - **Lost & Found**
+- **School Calendar**
 - **Book Reservation**
 - **School Finance**
 - **Transport / Bus**
