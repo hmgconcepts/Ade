@@ -43,6 +43,7 @@ const Super = {
     /* Enhanced knowledge base: each entry has keywords (m), a reply (r), an
        optional page link (p) and optional follow-up chips (chips). */
     KB: [
+      { m: ['role based navigation', 'menu security', 'why hidden', 'navigation', 'permission', 'not safe', 'roles'], r: 'School Connect uses role-based navigation for safety. **Admin/Super Admin** can see all modules plus oversight panels because they manage payments, staff, parents and students. **Staff/Teacher** see teaching/operation pages only. **Parents** see child/payment/communication pages only. **Students** see learning/exam/result pages only. Hidden menu items are intentional data protection, not a bug.', p: 'dashboard.html', chips: ['Admin overview', 'Staff dashboard', 'Parent dashboard', 'Student dashboard'] },
       { m: ['login', 'sign in', 'signin', 'password', 'cannot log', "can't log", 'access account'], r: 'To sign in, open the **Login** page and use your registered email + password. New here? Choose **Request access** — an admin approves you first. Forgot your password? Use the reset link on the login page.', p: 'login.html', chips: ['How do I get approved?', 'Enable 2FA'] },
       { m: ['approve', 'pending', 'activate account', 'admin approval'], r: 'New accounts start as **pending**. An admin opens **Admin Data → profiles** (or Settings) and sets your status to *approved*. Then you can sign in.', p: 'admin-data.html' },
       { m: ['2fa', 'two factor', 'two-factor', 'otp', 'secure my account'], r: 'Turn on **2-Factor Authentication** in **Settings** — it uses a free email one-time code (no SMS/AI cost).', p: 'settings.html' },
@@ -200,7 +201,7 @@ const Super = {
       document.getElementById('sc-chat-x').onclick = () => Super.chatbot.toggle(false);
       document.getElementById('sc-chat-send').onclick = () => Super.chatbot.send();
       document.getElementById('sc-chat-in').addEventListener('keydown', e => { if (e.key === 'Enter') Super.chatbot.send(); });
-      this.history.push({ from: 'bot', msg: 'Hi! 👋 I\'m the ' + ((Super.school && Super.school.name) || 'school') + ' assistant. Ask me anything about the portal, or tap a suggestion below. Tip: press **Ctrl+K** to search.', chips: this.QUICK });
+      this.history.push({ from: 'bot', msg: 'Hi! 👋 I\'m the ' + ((Super.school && Super.school.name) || 'school') + ' assistant. I explain pages in simple first-time-user language: what a feature means, who should use it, how to use it step by step, security/role rules, and the benefit to the school. Ask me about CBT, fees, results, attendance, dashboards, deployment, or tap a suggestion. Tip: press **Ctrl+K** to search permitted pages.', chips: ['Explain this page','Role based navigation','CBT exams','Fees','Report cards','Deployment'] });
     },
     toggle(force) {
       const w = document.getElementById('sc-chat-win'); if (!w) return;

@@ -114,53 +114,67 @@ const App = {
   },
 
 
+  isAdminRole(role) {
+    return ['super_admin','admin','principal','proprietor','head_teacher','bursar'].includes(String(role||'').toLowerCase());
+  },
+
+  roleSet(role) {
+    const r = String(role || '').toLowerCase();
+    const set = new Set([r]);
+    if (r === 'teacher') set.add('staff');
+    if (App.isAdminRole(r)) ['admin','super_admin','principal','proprietor','head_teacher','bursar','staff','teacher','parent','student','any','all','public'].forEach(x => set.add(x));
+    if (r === 'staff') set.add('teacher');
+    return set;
+  },
+
+  canAccessAllowList(allowText, role) {
+    const allow = String(allowText || '').toLowerCase().split(/s+/).filter(Boolean);
+    if (!allow.length) return App.isAdminRole(role);
+    if (allow.some(x => ['any','all','public'].includes(x))) return true;
+    if (App.isAdminRole(role)) return true;
+    const roles = App.roleSet(role);
+    return allow.some(a => roles.has(a));
+  },
+
   applyRoleNav(role) {
-    const normalise = (r) => String(r || '').trim().toLowerCase();
-    const current = normalise(role);
-    const expanded = new Set([current]);
-
-    if (current === 'teacher') expanded.add('staff');
-    if (current === 'super_admin') ['admin','principal','proprietor','head_teacher','bursar','staff','teacher','parent','student'].forEach(r => expanded.add(r));
-    else if (['admin','principal','proprietor','head_teacher','bursar'].includes(current)) ['staff','teacher','parent','student'].forEach(r => expanded.add(r));
-
+    const nav = document.querySelector('.app-nav');
     const links = [...document.querySelectorAll('[data-role-allow]')];
     links.forEach(el => {
-      const moduleId = normalise(el.getAttribute('data-module-id'));
-      const allow = (el.getAttribute('data-role-allow') || '').split(/s+/).map(normalise).filter(Boolean);
-      let ok = allow.some(a => expanded.has(a));
-
-      // IMPORTANT UI repair: never remove sidebar entries after the page loads.
-      // The old role filter used display:none; on real generated sites this made
-      // menus flash while loading and then disappear when a student/parent or an
-      // incomplete profile was detected. Keep every selected module visible,
-      // mark restricted entries, and let Supabase RLS + page logic protect data.
-      el.style.display = '';
-      el.classList.toggle('nav-locked', !ok);
-      if (!ok) {
-        el.setAttribute('aria-disabled', 'true');
-        el.title = 'Visible for navigation; some actions on this page may require a higher role.';
-      } else {
-        el.removeAttribute('aria-disabled');
-        el.removeAttribute('title');
-      }
+      const ok = App.canAccessAllowList(el.getAttribute('data-role-allow'), role);
+      // Security/UI repair v4: do NOT show every module to every role.
+      // Admin/Super Admin can see all for oversight. Staff, parents and students
+      // see only their permitted pages. Direct URL access is also blocked below.
+      el.style.display = ok ? '' : 'none';
+      el.classList.toggle('nav-locked', false);
+      el.removeAttribute('aria-disabled');
+      el.removeAttribute('title');
     });
-
-    if (App.ensureActiveNavVisible) App.ensureActiveNavVisible();
     App.ensureNavNotBlank(role);
+    App.enforceCurrentPageAccess(role);
   },
 
   ensureNavNotBlank(role) {
     const nav = document.querySelector('.app-nav');
     if (!nav) return;
     const links = [...nav.querySelectorAll('a')];
-    links.forEach(a => { a.style.display = ''; });
+    if (links.some(a => a.style.display !== 'none')) return;
+    const safe = new Set(['dashboard.html','notifications.html','inbox.html','feature-guide.html','about.html','contact.html']);
+    links.forEach(a => { if (safe.has((a.getAttribute('href')||'').toLowerCase())) a.style.display = ''; });
+  },
+
+  enforceCurrentPageAccess(role) {
+    const active = document.querySelector('.app-nav a.active');
+    if (!active) return;
+    if (active.style.display !== 'none') return;
+    const pageTitle = active.textContent.trim() || 'this page';
+    const content = document.querySelector('.app-content');
+    if (content) {
+      content.innerHTML = '<div class="card" style="max-width:760px;margin:30px auto;text-align:center;border-color:#fecaca;background:#fff7f7"><h2>🔒 Restricted Page</h2><p style="color:var(--gray-700)">Your role does not have permission to use <strong>'+esc(pageTitle)+'</strong>. This protects student data, finance records, staff records and admin controls.</p><p style="color:var(--gray-600)">If you believe you need this page, ask an Admin/Super Admin to review your account role in Approvals.</p><a class="btn btn-primary" href="dashboard.html">Return to your dashboard</a> <a class="btn btn-outline" href="feature-guide.html">Read feature guide</a></div>';
+    }
   },
 
   ensureActiveNavVisible() {
-    const nav = document.getElementById('app-sidebar');
-    if (!nav) return;
-    const active = nav.querySelector('.app-nav a.active');
-    if (active) active.style.display = '';
+    // Kept for backward compatibility; visibility is now handled by applyRoleNav.
   },
 
   /* ----- Auth (now METHODS of App so login forms calling
