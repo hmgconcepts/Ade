@@ -118,21 +118,20 @@ const App = {
       const allow = (el.getAttribute('data-role-allow') || '').split(/s+/).map(normalise).filter(Boolean);
       let ok = allow.some(a => expanded.has(a));
 
-      // Conservative fallback for generated client sites:
-      // if role mapping becomes inconsistent at runtime, never blank the menu.
-      // Core navigation should remain visible for signed-in users.
+      // IMPORTANT UI repair: never remove sidebar entries after the page loads.
+      // The old role filter used display:none; on real generated sites this made
+      // menus flash while loading and then disappear when a student/parent or an
+      // incomplete profile was detected. Keep every selected module visible,
+      // mark restricted entries, and let Supabase RLS + page logic protect data.
+      el.style.display = '';
+      el.classList.toggle('nav-locked', !ok);
       if (!ok) {
-        const safeForAllSignedIn = new Set(['dashboard','notifications','messages','inbox','events','gallery','eresources','student-profile']);
-        const safeForStaff = new Set(['students','attendance','results','report-cards','academic_records','assignments','library','cbt','classes','subjects','timetable','sow','idcards']);
-        const safeForParent = new Set(['fees','results','assignments','student-profile','complaints','idcards']);
-        const safeForStudent = new Set(['cbt-exam','assignments','timetable','eresources','results','student-profile']);
-        if (safeForAllSignedIn.has(moduleId)) ok = true;
-        else if (['staff','teacher'].includes(current) && safeForStaff.has(moduleId)) ok = true;
-        else if (current === 'parent' && safeForParent.has(moduleId)) ok = true;
-        else if (current === 'student' && safeForStudent.has(moduleId)) ok = true;
+        el.setAttribute('aria-disabled', 'true');
+        el.title = 'Visible for navigation; some actions on this page may require a higher role.';
+      } else {
+        el.removeAttribute('aria-disabled');
+        el.removeAttribute('title');
       }
-
-      el.style.display = ok ? '' : 'none';
     });
 
     if (App.ensureActiveNavVisible) App.ensureActiveNavVisible();
@@ -143,32 +142,14 @@ const App = {
     const nav = document.querySelector('.app-nav');
     if (!nav) return;
     const links = [...nav.querySelectorAll('a')];
-    const visible = links.filter(a => a.style.display !== 'none');
-    if (visible.length) return;
-
-    const current = String(role || '').toLowerCase();
-    const preferred = current === 'parent'
-      ? ['dashboard.html','student-profile.html','fees.html','results.html','assignments.html','inbox.html']
-      : (current === 'student'
-        ? ['dashboard.html','cbt-exam.html','assignments.html','timetable.html','results.html','student-profile.html']
-        : ['dashboard.html','students.html','attendance.html','results.html','report-cards.html','cbt.html','assignments.html']);
-
-    links.forEach(a => {
-      const href = (a.getAttribute('href') || '').toLowerCase();
-      if (preferred.includes(href) || href === 'dashboard.html') a.style.display = '';
-    });
+    links.forEach(a => { a.style.display = ''; });
   },
 
   ensureActiveNavVisible() {
     const nav = document.getElementById('app-sidebar');
     if (!nav) return;
-    const links = [...nav.querySelectorAll('.app-nav a')];
-    const visible = links.filter(a => a.style.display !== 'none');
-    if (!visible.length) return;
-    const active = links.find(a => a.classList.contains('active'));
-    if (active && active.style.display === 'none') {
-      active.style.display = '';
-    }
+    const active = nav.querySelector('.app-nav a.active');
+    if (active) active.style.display = '';
   },
 
   /* ----- Auth (now METHODS of App so login forms calling
