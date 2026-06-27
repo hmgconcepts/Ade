@@ -6,7 +6,7 @@
 <title>Take Exam • God of Seed Academy</title>
 <meta name="description" content="God of Seed Academy — Take Exam. Free school management platform by HMG Concepts.">
 <meta name="keywords" content="God of Seed Academy, school management, GOSA, HMG Concepts">
-<meta name="theme-color" content="#1036f8">
+<meta name="theme-color" content="#0f172a">
 <link rel="icon" type="image/png" href="assets/img/logo.png">
 <link rel="manifest" href="manifest.json">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -23,7 +23,7 @@
    Final UI/UX repair: stable, professional navigation for every layout.
    Prevents scattered icons/labels, fixes unsupported layout IDs, and keeps
    large module lists readable on desktop and mobile. */
-:root{--primary:#1036f8;--primary-dark:#1036f8;--primary-light:#79c51d;--accent:#79c51d;--gradient:linear-gradient(135deg,#1036f8,#79c51d);--gradient-dark:linear-gradient(135deg,#1036f8,#79c51d);--font:'Fjalla One',system-ui,sans-serif;--sc-primary:#1036f8;--sc-accent:#79c51d}
+:root{--primary:#0f172a;--primary-dark:#0f172a;--primary-light:#2563eb;--accent:#2563eb;--gradient:linear-gradient(135deg,#0f172a,#2563eb);--gradient-dark:linear-gradient(135deg,#0f172a,#2563eb);--font:'Plus Jakarta Sans',system-ui,sans-serif;--sc-primary:#0f172a;--sc-accent:#2563eb}
 body{font-family:var(--font)!important;background:#f8fafc}
 .app-layout{display:flex;min-height:100vh;background:#f8fafc;color:#0f172a}
 .app-sidebar{width:286px;flex-shrink:0;background:rgba(255,255,255,.98);border-right:1px solid #e2e8f0;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow:hidden;z-index:40;box-shadow:0 10px 25px rgba(15,23,42,.04)}
@@ -58,7 +58,7 @@ body{font-family:var(--font)!important;background:#f8fafc}
 @media(min-width:901px){.app-topbar .mobile-toggle{display:none}}
 </style>
 </head>
-<body data-theme="theme14" data-school="God of Seed Academy" data-font="fjallaone">
+<body data-theme="theme9" data-school="God of Seed Academy" data-font="plusjakarta">
 <div id="notif-bell" class="notif-bell" title="Notifications" data-chatbot>
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
   <span id="notif-badge" class="notif-badge" style="display:none">0</span>
@@ -105,6 +105,21 @@ body{font-family:var(--font)!important;background:#f8fafc}
     <div id="exam-root"><div class="card"><span class="pulse">Loading…</span></div></div>
   </div>
 </div>
+<div id="cbt-tools" style="position:fixed;right:16px;bottom:16px;z-index:9999;display:flex;flex-direction:column;gap:8px">
+  <button class="btn btn-primary" onclick="Tools.toggleCalc()">🧮 Calculator</button>
+  <button class="btn btn-outline" onclick="Tools.toggleSymbols()">Σ Math Keyboard</button>
+</div>
+<div id="calc-panel" class="card" style="display:none;position:fixed;right:16px;bottom:112px;z-index:9999;width:320px;max-width:92vw">
+  <h3 style="margin-top:0">🔬 Scientific Calculator</h3>
+  <input id="calc-display" class="form-input" style="font-size:1.15rem;text-align:right" readonly>
+  <div id="calc-grid" style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:10px"></div>
+  <p style="font-size:.78rem;color:var(--gray-500);margin-top:8px">Free on-screen calculator for STEM exams. Works offline in the browser.</p>
+</div>
+<div id="symbol-panel" class="card" style="display:none;position:fixed;left:16px;right:16px;bottom:16px;z-index:9999;max-height:42vh;overflow:auto">
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><h3 style="margin:0">Σ Mathematics / Scientific Keyboard</h3><button class="btn btn-sm btn-outline" onclick="Tools.toggleSymbols(false)">Close</button></div>
+  <p style="color:var(--gray-600);font-size:.85rem">Tap a symbol to insert it into the active typed-answer box.</p>
+  <div id="symbol-grid" style="display:flex;flex-wrap:wrap;gap:6px"></div>
+</div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="assets/js/config.js"></script>
 <script src="assets/js/cbt-engine.js"></script>
@@ -145,6 +160,7 @@ const Exam = {
     if(data.closed){ this.root().innerHTML='<div class="card"><h3>🚫 Closed</h3><p>This exam is no longer accepting submissions.</p></div>'; return; }
     this.data=data; CBT.prepareForStudent(this.data);
     this.answers=new Array(this.qs().length).fill(null);
+    try{ const dr=JSON.parse(localStorage.getItem('cbt-draft-'+data.code)||'null'); if(dr&&Array.isArray(dr.a)&&dr.a.length===this.answers.length){ this.answers=dr.a; this.idx=Number(dr.i||0); if(confirm('A saved draft was found on this device. Continue from where you stopped?')===false){ this.answers=new Array(this.qs().length).fill(null); this.idx=0; } } }catch(e){}
     this.remaining=(data.duration||45)*60; this.startTs=Date.now();
     if(data.instructions){ if(!confirm('Instructions:\n\n'+data.instructions+'\n\nClick OK to begin.')) { this.codeEntry(code); return; } }
     this.beginMonitor(); this.tick(); this.render();
@@ -157,7 +173,7 @@ const Exam = {
   render(){
     const q=this.qs()[this.idx]; if(!q){ return; }
     const opts=(q.options||[]).map((o,i)=>{ const L=String.fromCharCode(65+i); const checked=this.answers[this.idx]===L?'checked':''; return '<label style="display:block;padding:10px;border:1px solid var(--gray-200);border-radius:8px;margin:6px 0;cursor:pointer"><input type="radio" name="opt" value="'+L+'" '+checked+' onchange="Exam.answer(\''+L+'\')"> '+L+'. '+esc(o)+'</label>'; }).join('');
-    const free=(['short','numeric','essay','code','cloze','multinumeric'].includes(q.type))?'<textarea class="form-input" rows="3" oninput="Exam.answer(this.value)" placeholder="Type your answer">'+esc(this.answers[this.idx]||'')+'</textarea>':'';
+    const free=(['short','numeric','essay','code','cloze','multinumeric'].includes(q.type))?'<textarea class="form-input cbt-free-answer" rows="4" onfocus="Tools.active=this" oninput="Exam.answer(this.value)" placeholder="Type your answer. Use Σ Math Keyboard for symbols if needed.">'+esc(this.answers[this.idx]||'')+'</textarea>':'';
     this.root().innerHTML='<div class="card">'+
       '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><strong>Q '+(this.idx+1)+' / '+this.qs().length+'</strong>'+
       '<div>⏱ <span id="clock">'+Math.floor(this.remaining/60)+':'+String(this.remaining%60).padStart(2,'0')+'</span> <span id="viol" style="color:#dc2626;margin-left:10px"></span></div></div>'+
@@ -165,6 +181,8 @@ const Exam = {
       '<div style="display:flex;justify-content:space-between;margin-top:14px;gap:8px;flex-wrap:wrap">'+
         '<button class="btn btn-outline" onclick="Exam.prev()" '+(this.idx===0?'disabled':'')+'>← Prev</button>'+
         '<button class="btn btn-outline" onclick="Exam.flag()">🚩 Flag</button>'+
+        '<button class="btn btn-outline" onclick="Exam.readAloud()">🔊 Read</button>'+
+        '<button class="btn btn-outline" onclick="Exam.fullscreen()">↗ Fullscreen</button>'+
         (this.idx<this.qs().length-1?'<button class="btn btn-primary" onclick="Exam.next()">Next →</button>':'<button class="btn btn-primary" onclick="Exam.confirmSubmit()">Submit ✓</button>')+
       '</div>'+
       '<div style="margin-top:14px;display:flex;flex-wrap:wrap;gap:6px">'+this.qs().map((_,i)=>'<button onclick="Exam.go('+i+')" style="width:34px;height:34px;border-radius:6px;border:1px solid var(--gray-300);background:'+(i===this.idx?'var(--primary);color:#fff':(this.answers[i]!=null?'#dcfce7':(this.flags[i]?'#fef08a':'#fff')))+'">'+(i+1)+'</button>').join('')+'</div>'+
@@ -174,6 +192,8 @@ const Exam = {
   saveDraft(){ try{ localStorage.setItem('cbt-draft-'+this.data.code, JSON.stringify({a:this.answers,i:this.idx})); }catch(e){} },
   flag(){ this.flags[this.idx]=!this.flags[this.idx]; this.render(); },
   go(i){ this.idx=i; this.render(); }, next(){ if(this.idx<this.qs().length-1){this.idx++;this.render();} }, prev(){ if(this.idx>0){this.idx--;this.render();} },
+  readAloud(){ try{ const q=this.qs()[this.idx]; const text='Question '+(this.idx+1)+'. '+(q.question||'')+'. '+(q.options||[]).map((o,i)=>String.fromCharCode(65+i)+'. '+o).join('. '); speechSynthesis.cancel(); speechSynthesis.speak(new SpeechSynthesisUtterance(text)); }catch(e){ toast('Read aloud is not available in this browser.','warning'); } },
+  fullscreen(){ const el=document.documentElement; try{ if(el.requestFullscreen) el.requestFullscreen(); }catch(e){} },
   confirmSubmit(){ const un=this.answers.filter(a=>a==null).length; if(un && !confirm(un+' question(s) unanswered. Submit anyway?'))return; this.submit(); },
   async submit(){
     if(this._done)return; this._done=true; clearInterval(this.timer); if(this.monitor)this.monitor.stop();
@@ -217,6 +237,28 @@ const Exam = {
 function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 function toast(m,t){ alert(m); }
 function openModal(){} function closeModal(){}
+const Tools = {
+  active:null, expr:'',
+  symbols:'± ∓ × ÷ · ≈ ≠ ≡ ≤ ≥ < > ∞ √ ∛ ∜ π θ α β γ δ λ μ Ω ω Δ ∇ ∂ ∫ ∑ ∏ ∈ ∉ ∪ ∩ ⊂ ⊆ ∀ ∃ ⇒ ⇔ → ← ↔ ° ′ ″ ² ³ ⁴ ₀ ₁ ₂ ₃ ₄ ₅ ₆ ₇ ₈ ₉ ¹ ½ ¼ ¾ ⁄ ₙ ₓ ₊ ₋ H₂O CO₂ O₂ Na⁺ Cl⁻ e⁻ pH ∆H mol kg m² m³'.split(' '),
+  calcButtons:['sin','cos','tan','log','ln','√','x²','xʸ','π','e','7','8','9','÷','⌫','4','5','6','×','C','1','2','3','-','CE','0','.','=','+','Ans'],
+  init(){
+    const cg=document.getElementById('calc-grid'); if(cg&&!cg.dataset.ready){ cg.dataset.ready='1'; cg.innerHTML=this.calcButtons.map(b=>'<button class="btn btn-sm btn-outline" onclick="Tools.calcPress(\''+b+'\')">'+b+'</button>').join(''); }
+    const sg=document.getElementById('symbol-grid'); if(sg&&!sg.dataset.ready){ sg.dataset.ready='1'; sg.innerHTML=this.symbols.map(x=>'<button class="btn btn-sm btn-outline" onclick="Tools.insertSymbol(\''+x+'\')">'+x+'</button>').join(''); }
+  },
+  toggleCalc(v){ this.init(); const p=document.getElementById('calc-panel'); if(p)p.style.display=(v===false?'none':(p.style.display==='none'||!p.style.display?'block':'none')); },
+  toggleSymbols(v){ this.init(); const p=document.getElementById('symbol-panel'); if(p)p.style.display=(v===false?'none':(p.style.display==='none'||!p.style.display?'block':'none')); },
+  insertSymbol(x){ const el=this.active || document.activeElement; if(el && ('value' in el)){ const a=el.selectionStart||0,b=el.selectionEnd||0; el.value=el.value.slice(0,a)+x+el.value.slice(b); el.focus(); el.selectionStart=el.selectionEnd=a+x.length; if(typeof Exam!=='undefined') Exam.answer(el.value); } },
+  calcPress(b){
+    if(b==='C'){this.expr='';return this.show();} if(b==='CE'){this.expr='';this.ans='';return this.show();} if(b==='⌫'){this.expr=this.expr.slice(0,-1);return this.show();}
+    if(b==='Ans'){this.expr+=this.ans||'';return this.show();} if(b==='='){return this.eval();}
+    const map={'×':'*','÷':'/','π':'pi','√':'sqrt(','x²':'^2','xʸ':'^','ln':'ln(','log':'log(','sin':'sin(','cos':'cos(','tan':'tan('};
+    this.expr += map[b] || b; this.show();
+  },
+  show(){ const d=document.getElementById('calc-display'); if(d)d.value=this.expr; },
+  eval(){ try{ let e=this.expr.replace(/pi/g,'Math.PI').replace(/e/g,'Math.E').replace(/sin(/g,'Math.sin(').replace(/cos(/g,'Math.cos(').replace(/tan(/g,'Math.tan(').replace(/sqrt(/g,'Math.sqrt(').replace(/log(/g,'Math.log10(').replace(/ln(/g,'Math.log('); while(/(d+(?:.d+)?)^(d+(?:.d+)?)/.test(e)) e=e.replace(/(d+(?:.d+)?)^(d+(?:.d+)?)/g,'Math.pow($1,$2)'); const val=Function('"use strict";return ('+e+')')(); this.ans=String(Math.round(Number(val)*1e10)/1e10); this.expr=this.ans; this.show(); }catch(err){ this.expr='Error'; this.show(); } }
+};
+Tools.init();
+document.addEventListener('keydown',function(e){ if(!Exam.data || ['INPUT','TEXTAREA'].includes((e.target&&e.target.tagName)||'')) return; const k=e.key.toLowerCase(); if(['a','b','c','d'].includes(k)){ Exam.answer(k.toUpperCase()); Exam.render(); } if(k==='n'||e.key==='ArrowRight') Exam.next(); if(k==='p'||e.key==='ArrowLeft') Exam.prev(); if(k==='r') Exam.flag(); if(k==='s') Exam.confirmSubmit(); });
 Exam.start();
 </script>
 </body></html>

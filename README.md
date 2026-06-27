@@ -7,8 +7,8 @@ Welcome to the official, enterprise-grade School Connect management platform gen
 This fully-featured platform adapts to traditional and modern build deployments. It comes built-in with features like offline access, push notifications, row-level security, and a beautiful UI tailored to your specific branding choices.
 
 **School Motto:** Excellence in Learning and Character
-**Branding Theme:** theme14 (Primary: #1036f8, Accent: #79c51d)
-**Typography:** Fjalla One
+**Branding Theme:** theme9 (Primary: #0f172a, Accent: #2563eb)
+**Typography:** Plus Jakarta Sans
 
 ---
 
@@ -56,7 +56,6 @@ Your platform is pre-configured with the following modules:
 - **AI Question Prompts**
 - **Entrance & Assessments**
 - **Results / Scores**
-- **Certificates & Documents**
 - **Marketing Flyer**
 - **Report Cards (flexible)**
 - **Analytics Dashboard**
@@ -89,49 +88,53 @@ Your platform is pre-configured with the following modules:
 - **Complaints & Grievance**
 - **Leave Management**
 - **Visitor Management**
-- **About the Developer**
-- **Conduct / Behaviour**
-- **Health / Clinic**
-- **Promotion / Graduation**
-- **Integrated LMS**
-- **Rewards & Badges (PBIS)**
-- **Career & Placement**
-- **Lesson Plans & Curriculum**
-- **Behaviour & PBIS Points**
-- **Special Education / Support**
-- **Substitute / Cover**
-- **Salary & Payslips**
+- **Hostel / Boarding**
+- **Transport / Bus**
+- **Alumni Network**
+- **Certificates & Documents**
 - **Admissions & Enrollment**
+- **Promotion / Graduation**
+- **School Finance**
+- **Inventory & Assets**
+- **Salary & Payslips**
 - **Payroll Register**
 - **Staff Loans & Advances**
 - **Staff Bonuses**
 - **Staff Appraisals**
-- **Hostel / Boarding**
-- **Alumni Network**
-- **Inventory & Assets**
-- **Custom Document Builder**
-- **Advanced Fleet GPS**
-- **Facility Booking**
-- **Compliance & Audit**
-- **Audit / Activity Log**
-- **Voting & Polls**
-- **PTA Meeting Scheduler**
-- **Front Desk / Dispatch**
-- **IT / Help Desk**
-- **E-Resources / Notes**
-- **School Calendar**
-- **Lost & Found**
-- **Book Reservation**
-- **School Finance**
-- **Cafeteria & Meals**
-- **Transport / Bus**
-- **Scholarships & Aid**
-- **Fundraising & Donations**
-- **Online Fee Payments**
 - **Grading Rubrics**
 - **Academic Transcripts**
 - **Transfer Certificates**
 - **Counselling & Wellbeing**
+- **Voting & Polls**
+- **Health / Clinic**
+- **Conduct / Behaviour**
+- **E-Resources / Notes**
+- **Birthdays**
+- **Integrated LMS**
+- **Rewards & Badges (PBIS)**
+- **Cafeteria & Meals**
+- **Scholarships & Aid**
+- **Front Desk / Dispatch**
+- **Custom Document Builder**
+- **Advanced Fleet GPS**
+- **Facility Booking**
+- **Compliance & Audit**
+- **About the Developer**
+- **Audit / Activity Log**
+- **Special Education / Support**
+- **Behaviour & PBIS Points**
+- **Substitute / Cover**
+- **Lesson Plans & Curriculum**
+- **Career & Placement**
+- **In-App Inbox**
+- **PTA Meeting Scheduler**
+- **IT / Help Desk**
+- **Reports & Export**
+- **School Calendar**
+- **Lost & Found**
+- **Book Reservation**
+- **Fundraising & Donations**
+- **Online Fee Payments**
 
 ---
 
