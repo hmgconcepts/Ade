@@ -427,3 +427,9 @@ body.sc-high-contrast .table-wrap { border: 2px solid #000 !important; }
     border-radius: 8px; width: 40px; height: 40px; font-size: 1.2rem; cursor: pointer;
   }
 }
+
+/* Generated app-shell nav safety: restricted modules remain visible instead of disappearing. */
+.app-nav a.nav-locked { opacity: .62; }
+.app-nav a.nav-locked .app-nav-icon { filter: grayscale(.35); }
+.app-nav a.nav-locked::after { content: '🔒'; font-size: .72rem; opacity: .65; justify-self: end; }
+.app-nav a.nav-locked.active { opacity: 1; }
