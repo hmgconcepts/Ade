@@ -1,12 +1,12 @@
-# Aaooso — Comprehensive School Connect Platform
+# God of Seed Academy — Comprehensive School Connect Platform
 
-Welcome to the official, enterprise-grade School Connect management platform generated specifically for **Aaooso**. This deployment package provides everything needed to establish a digital footprint for your institution, complete with progressive web application capabilities, advanced role-based access, and enterprise-level modules.
+Welcome to the official, enterprise-grade School Connect management platform generated specifically for **God of Seed Academy**. This deployment package provides everything needed to establish a digital footprint for your institution, complete with progressive web application capabilities, advanced role-based access, and enterprise-level modules.
 
 ## 🚀 Overview
 
 This fully-featured platform adapts to traditional and modern build deployments. It comes built-in with features like offline access, push notifications, row-level security, and a beautiful UI tailored to your specific branding choices.
 
-**School Motto:** Cckckkdkc
+**School Motto:** Excellence in Learning and Character
 **Branding Theme:** theme2 (Primary: #1c72e7, Accent: #5e2174)
 **Typography:** Inter
 
@@ -90,6 +90,50 @@ Your platform is pre-configured with the following modules:
 - **Leave Management**
 - **Visitor Management**
 - **About the Developer**
+- **Conduct / Behaviour**
+- **Health / Clinic**
+- **Promotion / Graduation**
+- **Integrated LMS**
+- **Rewards & Badges (PBIS)**
+- **Career & Placement**
+- **Lesson Plans & Curriculum**
+- **Behaviour & PBIS Points**
+- **Special Education / Support**
+- **Substitute / Cover**
+- **Salary & Payslips**
+- **Admissions & Enrollment**
+- **Payroll Register**
+- **Staff Loans & Advances**
+- **Staff Bonuses**
+- **Staff Appraisals**
+- **Hostel / Boarding**
+- **Alumni Network**
+- **Inventory & Assets**
+- **Custom Document Builder**
+- **Advanced Fleet GPS**
+- **Facility Booking**
+- **Compliance & Audit**
+- **Audit / Activity Log**
+- **Voting & Polls**
+- **PTA Meeting Scheduler**
+- **In-App Inbox**
+- **IT / Help Desk**
+- **Front Desk / Dispatch**
+- **E-Resources / Notes**
+- **Birthdays**
+- **Lost & Found**
+- **School Calendar**
+- **Book Reservation**
+- **School Finance**
+- **Transport / Bus**
+- **Cafeteria & Meals**
+- **Scholarships & Aid**
+- **Fundraising & Donations**
+- **Online Fee Payments**
+- **Grading Rubrics**
+- **Academic Transcripts**
+- **Transfer Certificates**
+- **Counselling & Wellbeing**
 
 ---
 

@@ -1,4 +1,4 @@
-# 🚀 Deployment Guide — Aaooso
+# 🚀 Deployment Guide — God of Seed Academy
 
 This guide walks you from a freshly downloaded ZIP to a **live, working school
 portal** in about 15 minutes, using only **free tools** (Supabase free tier +
@@ -20,7 +20,7 @@ free static hosting). No credit card. No monthly fees. No AI APIs.
 
 1. Go to **https://supabase.com** → click **Start your project** → sign in with GitHub.
 2. Click **New project**.
-   - **Name:** Kcckckvkvkv
+   - **Name:** GOSA
    - **Database Password:** click *Generate a password* and **save it somewhere safe**.
    - **Region:** pick the one closest to your school.
    - Click **Create new project** and wait ~2 minutes for it to finish provisioning.
@@ -75,7 +75,7 @@ free static hosting). No credit card. No monthly fees. No AI APIs.
 Pick ONE of these (all free):
 
 ### Option A — GitHub Pages (recommended, easiest)
-1. Create a new repository at https://github.com/new (e.g. `aaooso-portal`), set it **Public**, click **Create**.
+1. Create a new repository at https://github.com/new (e.g. `god-of-seed-academy-portal`), set it **Public**, click **Create**.
 2. On the repo page click **Add file → Upload files**, then drag in **ALL** the
    unzipped files and folders (keep the folder structure), and **Commit**.
 3. Go to **Settings → Pages**. Under *Build and deployment* → *Source* choose
