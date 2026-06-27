@@ -1,6 +1,6 @@
 
 /* Pages that must NEVER force a redirect to login (public + the login page itself). */
-const PUBLIC_PAGES = ['login','index','about','contact','apply','register','signup',''];
+const PUBLIC_PAGES = ['login','index','about','contact','apply','register','signup','cbt-exam','offline',''];
 
 function currentPage() {
   return (location.pathname.split('/').pop() || 'index.html').replace('.html','');
@@ -38,9 +38,10 @@ const App = {
     if (!sb) { App.applyRoleDashboard('demo', { full_name:'Demo User', role:'admin' }); App.applyRoleNav('admin'); return; }
     sb.auth.getUser().then(({ data: { user } }) => {
       if (!user) { location.href = 'login.html'; return; }
-      sb.from('profiles').select('full_name,email,role,status').eq('id', user.id).single().then(({ data }) => {
-        const role = (data && data.role) || 'student';
-        const status = (data && data.status) || 'pending';
+      sb.from('profiles').select('full_name,email,role,status').eq('id', user.id).maybeSingle().then(({ data, error }) => {
+        if (error) console.warn('Profile lookup failed:', error.message || error);
+        const role = (data && data.role) || user.user_metadata?.role || 'student';
+        const status = (data && data.status) || 'active';
         const name = (data && data.full_name) || user.user_metadata?.full_name || user.email || 'User';
         if (status === 'pending') {
           document.body.innerHTML = '<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:40px"><div style="max-width:440px;text-align:center;background:white;padding:40px;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,0.1)"><h2 style="margin-bottom:12px">⏳ Account pending approval</h2><p style="color:var(--gray-600)">Your account is awaiting admin approval. You will receive an email once it is activated.</p></div></div>';
@@ -59,7 +60,16 @@ const App = {
         document.querySelectorAll('[data-signout]').forEach(el => el.style.display = '');
         App.applyRoleDashboard(role, { full_name:name, email:user.email, role });
         App.applyRoleNav(role);
-      }).catch(() => App.applyRoleNav(role));
+      }).catch((err) => {
+        console.warn('Profile load failed:', err && err.message ? err.message : err);
+        const fallbackRole = user.user_metadata?.role || 'student';
+        const fallbackName = user.user_metadata?.full_name || user.email || 'User';
+        App.currentRole = fallbackRole; App.currentUserName = fallbackName;
+        window.SC_PROFILE = { id:user.id, email:user.email, role:fallbackRole, status:'active', full_name:fallbackName };
+        document.querySelectorAll('[data-signout]').forEach(el => el.style.display = '');
+        App.applyRoleDashboard(fallbackRole, { full_name:fallbackName, email:user.email, role:fallbackRole });
+        App.applyRoleNav(fallbackRole);
+      });
     });
   },
 
@@ -67,14 +77,14 @@ const App = {
     const name = (profile && (profile.full_name || profile.email)) || 'User';
     const prettyRole = String(role || 'user').replace(/_/g,' ').replace(/w/g, c => c.toUpperCase());
     const roleMap = {
-      super_admin:['super_admin','admin','principal','proprietor','head_teacher','bursar','staff','teacher','parent','student'],
-      admin:['admin','principal','proprietor','head_teacher','bursar','staff','teacher','parent','student'],
-      principal:['admin','principal','proprietor','head_teacher','bursar','staff','teacher','parent','student'],
-      proprietor:['admin','principal','proprietor','head_teacher','bursar','staff','teacher','parent','student'],
-      head_teacher:['admin','principal','proprietor','head_teacher','bursar','staff','teacher','parent','student'],
-      bursar:['admin','principal','proprietor','head_teacher','bursar','staff','teacher','parent','student'],
-      staff:['staff','teacher'],
-      teacher:['staff','teacher'],
+      super_admin:['super_admin','admin'],
+      admin:['admin'],
+      principal:['admin'],
+      proprietor:['admin'],
+      head_teacher:['admin'],
+      bursar:['admin'],
+      staff:['staff'],
+      teacher:['staff'],
       parent:['parent'],
       student:['student']
     };
@@ -94,10 +104,11 @@ const App = {
     }
     const q=document.getElementById('dash-quick-links');
     if(q){
-      const links = role==='parent' ? [['My Child','student-profile.html'],['Fees','fees.html'],['Results','results.html'],['Messages','inbox.html']] :
-        (role==='student' ? [['Take CBT','cbt-exam.html'],['Assignments','assignments.html'],['Timetable','timetable.html'],['My Results','results.html']] :
-        (['staff','teacher'].includes(role) ? [['Attendance','attendance.html'],['Results','results.html'],['CBT','cbt.html'],['Broadsheets','academic_records.html'],['Report Cards','report-cards.html']] :
-        [['Academic Setup','academic_setup.html'],['Students','students.html'],['Approvals','approvals.html'],['Analytics','analytics.html'],['Storage','storage.html']]));
+      const adminRoles = ['super_admin','admin','principal','proprietor','head_teacher','bursar'];
+      const links = role==='parent' ? [['Child Dashboard','student-profile.html'],['Fees','fees.html'],['Results','results.html'],['Assignments','assignments.html'],['Messages','inbox.html'],['Complaint','complaints.html']] :
+        (role==='student' ? [['Take CBT','cbt-exam.html'],['Assignments','assignments.html'],['Timetable','timetable.html'],['Digital Library','digital_library.html'],['E-Resources','eresources.html'],['My Results','results.html'],['My Profile','student-profile.html']] :
+        (['staff','teacher'].includes(role) ? [['Attendance','attendance.html'],['Results','results.html'],['CBT Manager','cbt.html'],['Report Cards','report-cards.html'],['Broadsheets','academic_records.html'],['Lesson Plans','lesson_plans.html'],['Scheme of Work','sow.html']] :
+        [['Academic Setup','academic_setup.html'],['Approvals','approvals.html'],['Students','students.html'],['Staff','staff.html'],['Parents','parents.html'],['Finance','finance.html'],['Payroll','payroll.html'],['Analytics','analytics.html'],['Admin Data','admin-data.html'],['Storage','storage.html'],['Compliance','compliance.html'],['Activity Log','activity_log.html']]));
       q.innerHTML = links.map(x=>'<a class="btn btn-outline btn-sm" href="'+x[1]+'">'+x[0]+'</a>').join('');
     }
   },
