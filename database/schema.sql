@@ -132,6 +132,8 @@ create table if not exists public.attendance (
   created_at timestamptz default now()
 );
 alter table public.attendance enable row level security;
+alter table public.attendance add column if not exists student_name text;
+create unique index if not exists attendance_student_date_unique on public.attendance(student_id,date) where student_id is not null;
 
 create table if not exists public.results (
   id uuid primary key default uuid_generate_v4(),
@@ -147,6 +149,10 @@ create table if not exists public.results (
   created_at timestamptz default now()
 );
 alter table public.results enable row level security;
+alter table public.results add column if not exists student_name text;
+alter table public.results add column if not exists assessment_source text default 'manual';
+alter table public.results add column if not exists assessment_ref text;
+create unique index if not exists results_assessment_ref_unique on public.results(assessment_source, assessment_ref) where assessment_ref is not null;
 
 create table if not exists public.timetable (
   id uuid primary key default uuid_generate_v4(),
@@ -793,6 +799,23 @@ begin
   end loop;
 end $$;
 
+
+-- ---- Results ownership: staff can read academic scores, but only admins or the teacher who created a score may update/delete it ----
+drop policy if exists "results_select_v5" on public.results;
+drop policy if exists "results_insert_v5" on public.results;
+drop policy if exists "results_update_v5" on public.results;
+drop policy if exists "results_delete_v5" on public.results;
+create policy "results_select_v5" on public.results for select using (
+  public.is_staff(auth.uid()) or public.is_parent_of(auth.uid(), student_id)
+);
+create policy "results_insert_v5" on public.results for insert with check (public.is_staff(auth.uid()));
+create policy "results_update_v5" on public.results for update using (
+  public.is_admin(auth.uid()) or teacher_id = auth.uid()
+) with check (public.is_admin(auth.uid()) or teacher_id = auth.uid());
+create policy "results_delete_v5" on public.results for delete using (
+  public.is_admin(auth.uid()) or teacher_id = auth.uid()
+);
+
 -- ---- Attendance: parents see own children; staff manage ----
 drop policy if exists "att_read"  on public.attendance;
 drop policy if exists "att_write" on public.attendance;
@@ -806,10 +829,20 @@ create policy "att_write" on public.attendance for all using (public.is_staff(au
 -- ---- Results: parents see own children; staff manage ----
 drop policy if exists "res_read"  on public.results;
 drop policy if exists "res_write" on public.results;
-create policy "res_read"  on public.results for select using (
-  public.is_parent_of(auth.uid(), student_id) or public.is_staff(auth.uid())
+drop policy if exists "results_select_v5" on public.results;
+drop policy if exists "results_insert_v5" on public.results;
+drop policy if exists "results_update_v5" on public.results;
+drop policy if exists "results_delete_v5" on public.results;
+create policy "results_select_v5" on public.results for select using (
+  public.is_staff(auth.uid()) or public.is_parent_of(auth.uid(), student_id)
 );
-create policy "res_write" on public.results for all using (public.is_staff(auth.uid()));
+create policy "results_insert_v5" on public.results for insert with check (public.is_staff(auth.uid()));
+create policy "results_update_v5" on public.results for update using (
+  public.is_admin(auth.uid()) or teacher_id = auth.uid()
+) with check (public.is_admin(auth.uid()) or teacher_id = auth.uid());
+create policy "results_delete_v5" on public.results for delete using (
+  public.is_admin(auth.uid()) or teacher_id = auth.uid()
+);
 
 -- ---- Conduct / Health / Behaviour / Support: parents see own; staff manage ----
 drop policy if exists "cond_read"  on public.conduct;
@@ -927,6 +960,17 @@ create policy "rep_all" on public.reports for all using (public.is_staff(auth.ui
 drop policy if exists "prom_all" on public.promotions;
 create policy "prom_all" on public.promotions for all using (public.is_staff(auth.uid()));
 
+-- ---- Academic periods / lookups: everyone may read; admins manage ----
+drop policy if exists "ap_read" on public.academic_periods;
+drop policy if exists "ap_write" on public.academic_periods;
+create policy "ap_read" on public.academic_periods for select using (auth.role() = 'authenticated');
+create policy "ap_write" on public.academic_periods for all using (public.is_admin(auth.uid())) with check (public.is_admin(auth.uid()));
+
+drop policy if exists "lookups_read" on public.lookups;
+drop policy if exists "lookups_write" on public.lookups;
+create policy "lookups_read" on public.lookups for select using (auth.role() = 'authenticated');
+create policy "lookups_write" on public.lookups for all using (public.is_admin(auth.uid())) with check (public.is_admin(auth.uid()));
+
 -- ---- Parent-child ----
 drop policy if exists "pc_read"  on public.parent_child;
 drop policy if exists "pc_write" on public.parent_child;
@@ -987,3 +1031,22 @@ select 'School Connect schema v8 installed successfully ✅' as status;
 -- Safe for fresh and existing databases. Fixes: could not find 'teacher' column of subjects.
 alter table if exists public.subjects add column if not exists teacher text;
 alter table if exists public.subjects add column if not exists teacher_id uuid references public.profiles(id) on delete set null;
+
+
+-- ---- Certificate verification: public-safe lookup by serial/cert code ----
+create or replace function public.verify_certificate(p_code text)
+returns table(source text, serial_no text, student_name text, certificate_type text, issued_on text, score text, status text)
+language plpgsql security definer set search_path=public as $$
+begin
+  return query
+  select 'certificate'::text, c.serial_no::text, coalesce(s.full_name,'')::text, coalesce(c.type,'Certificate')::text,
+         coalesce(c.issued_on::text,'')::text, ''::text, 'valid'::text
+  from public.certificates c left join public.students s on s.id=c.student_id
+  where upper(c.serial_no)=upper(p_code)
+  union all
+  select 'cbt'::text, r.cert_code::text, r.student_name::text, coalesce(e.title,e.subject,'CBT Certificate')::text,
+         coalesce(r.created_at::date::text,'')::text, (r.score::text || '/' || r.total::text || ' (' || coalesce(r.percent,0)::text || '%)')::text, 'valid'::text
+  from public.cbt_results r left join public.cbt_exams e on e.id=r.exam_id
+  where r.cert_code is not null and r.cert_code<>'' and upper(r.cert_code)=upper(p_code);
+end $$;
+grant execute on function public.verify_certificate(text) to anon, authenticated;

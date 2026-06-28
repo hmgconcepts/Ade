@@ -64,6 +64,8 @@ create table if not exists public.school_settings (
   staff_prefix text default 'STF',
   staff_next int default 1,
   grading jsonb default '[{"min":70,"grade":"A"},{"min":60,"grade":"B"},{"min":50,"grade":"C"},{"min":45,"grade":"D"},{"min":40,"grade":"E"},{"min":0,"grade":"F"}]'::jsonb,
+  signature_url text default '',
+  principal_name text default '',
   updated_at timestamptz default now(),
   check (id = 1)
 );
@@ -322,3 +324,6 @@ select 'School Connect Enhancements schema (Connect Repair v3) installed ✅' as
 -- Safe for fresh and existing databases. Fixes: could not find 'teacher' column of subjects.
 alter table if exists public.subjects add column if not exists teacher text;
 alter table if exists public.subjects add column if not exists teacher_id uuid references public.profiles(id) on delete set null;
+
+alter table public.school_settings add column if not exists signature_url text default '';
+alter table public.school_settings add column if not exists principal_name text default '';
