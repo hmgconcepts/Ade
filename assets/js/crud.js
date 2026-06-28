@@ -71,8 +71,9 @@ const CRUD = {
       {key:'status',label:'Status',type:'select',options:['present','absent','late','excused']},
       {key:'time_in',label:'Time in',type:'time'}
     ]},
-    results: { table:'results', title:'Result', cols:[
-      {key:'student_name',label:'Student',type:'ref',refTable:'students',refValue:'full_name',refExtra:['class'],refStore:'value',groupBy:'class',searchable:true,autofill:{class:'class'}},
+    results: { table:'results', title:'Result / Subject Score Sheet Row', cols:[
+      {key:'student_id',label:'Student (pick from registered list)',type:'ref',refTable:'students',refValue:'full_name',refExtra:['class','admission_no'],refStore:'id',groupBy:'class',searchable:true,autofill:{student_name:'full_name',class:'class'}},
+      {key:'student_name',label:'Student name (auto)',type:'text',readonly:true},
       {key:'subject',label:'Subject',type:'ref',refTable:'subjects',refValue:'name',refStore:'value',required:true},
       {key:'class',label:'Class',type:'ref',refTable:'classes',refValue:'name'},
       {key:'term',label:'Term',type:'lookup',lookupKind:'term'},
@@ -430,8 +431,9 @@ const CRUD = {
       }
       return '<td>' + esc(String(v == null ? '' : v)).slice(0, 80) + '</td>';
     }).join('') + (d.readOnly ? '' :
-      '<td style="white-space:nowrap" data-admin-only>' +
+      '<td style="white-space:nowrap" data-staff-only>' +
         (moduleId === 'students' ? '<a class="btn btn-sm btn-primary" href="student-profile.html?student=' + row.id + '">Dashboard</a> ' : '') +
+        (moduleId === 'staff' ? '<a class="btn btn-sm btn-primary" href="teacher-overview.html?staff=' + row.id + '">Teacher overview</a> ' : '') +
         ((moduleId === 'payroll' || moduleId === 'hr') ? '<button class="btn btn-sm btn-primary" onclick="CRUD.printPayslip(\'' + row.id + '\')">Payslip</button> ' : '') +
         '<button class="btn btn-sm btn-outline" onclick="CRUD.openForm(\'' + moduleId + '\',\'' + row.id + '\')">Edit</button> ' +
         '<button class="btn btn-sm btn-outline" onclick="CRUD.remove(\'' + moduleId + '\',\'' + row.id + '\')">Delete</button>' +
@@ -563,6 +565,11 @@ const CRUD = {
     });
     if (missing) { toast(missing + ' is required.', 'warning'); return; }
     if (d.generic) { payload.module = d.module; payload.data = dataObj; if (!payload.title && dataObj.title) payload.title = dataObj.title; }
+    // V6: teacher-owned score sheets. Admin can supervise all, but a subject teacher should only edit/delete records they created.
+    if (d.table === 'results' && !id && window.SC_PROFILE && SC_PROFILE.id) {
+      payload.teacher_id = SC_PROFILE.id;
+      payload.assessment_source = payload.assessment_source || 'manual';
+    }
     // Issue 5: auto-compute payroll net pay when left blank
     if (d.table === 'payroll' && (payload.net_pay == null)) {
       const n = (x) => Number(payload[x]) || 0;
@@ -583,7 +590,17 @@ const CRUD = {
     else res = await this.sb.from(d.table).insert(payload);
     if (res.error) { toast(res.error.message, 'danger', 6000); return; }
     if (window.App && App.logActivity) App.logActivity(id ? 'update' : 'create', d.table, id || d.title);
-    closeModal(); toast('✅ Saved.', 'success'); this.renderList(moduleId);
+    closeModal();
+    if (!id && (moduleId === 'students' || moduleId === 'staff')) {
+      const email = moduleId === 'students' ? payload.guardian_email : payload.email;
+      if (email) {
+        const role = moduleId === 'students' ? 'student/parent' : 'staff';
+        const invite = 'Login invitation for '+(payload.full_name||d.title)+'\nEmail: '+email+'\nRole: '+role+'\nOpen login.html → Request access → use this email → create password → admin approves in Approvals.';
+        try { navigator.clipboard && navigator.clipboard.writeText(invite); } catch(e) {}
+        toast('✅ Saved. Login invitation copied. The user must request access, then admin approves.', 'success', 8000);
+      } else toast('✅ Saved. Add an email to generate login invitation details.', 'success', 6000);
+    } else toast('✅ Saved.', 'success');
+    this.renderList(moduleId);
   },
 
   async remove(moduleId, id) {
