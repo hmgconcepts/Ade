@@ -455,3 +455,7 @@ body { letter-spacing: -0.01em; background: linear-gradient(180deg,#f8fafc 0%,#e
 .form-input:focus, .form-select:focus, .form-textarea:focus { box-shadow:0 0 0 4px var(--ring) !important; }
 .table-wrap { background:#fff; box-shadow:0 8px 22px rgba(15,23,42,.04); }
 th { background:#f1f5f9 !important; color:#334155 !important; }
+
+/* V5 secure navigation: hide role-filtered menu until profile role is resolved. */
+body:not([data-role-ready="1"]) .app-nav a[data-role-allow] { display: none !important; }
+.app-nav a[style*="display: none"] { display: none !important; }
