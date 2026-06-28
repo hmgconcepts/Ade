@@ -19,7 +19,6 @@ const App = {
       return;
     }
     App.applyRoleVisibility();
-    App.loadPageData();
   },
 
   /* Re-apply saved dark/light preference */
@@ -35,7 +34,7 @@ const App = {
   },
 
   applyRoleVisibility() {
-    if (!sb) { App.applyRoleDashboard('demo', { full_name:'Demo User', role:'admin' }); App.applyRoleNav('admin'); return; }
+    if (!sb) { App.applyRoleDashboard('demo', { full_name:'Demo User', role:'admin' }); App.applyRoleNav('admin'); App.loadPageData(); return; }
     sb.auth.getUser().then(({ data: { user } }) => {
       if (!user) { location.href = 'login.html'; return; }
       sb.from('profiles').select('full_name,email,role,status').eq('id', user.id).maybeSingle().then(({ data, error }) => {
@@ -60,6 +59,7 @@ const App = {
         document.querySelectorAll('[data-signout]').forEach(el => el.style.display = '');
         App.applyRoleDashboard(role, { full_name:name, email:user.email, role });
         App.applyRoleNav(role);
+        App.loadPageData();
       }).catch((err) => {
         console.warn('Profile load failed:', err && err.message ? err.message : err);
         const fallbackRole = user.user_metadata?.role || 'student';
@@ -69,6 +69,7 @@ const App = {
         document.querySelectorAll('[data-signout]').forEach(el => el.style.display = '');
         App.applyRoleDashboard(fallbackRole, { full_name:fallbackName, email:user.email, role:fallbackRole });
         App.applyRoleNav(fallbackRole);
+        App.loadPageData();
       });
     });
   },
@@ -137,6 +138,8 @@ const App = {
   },
 
   applyRoleNav(role) {
+    document.body.dataset.roleReady = '1';
+    document.body.dataset.currentRole = String(role || '').toLowerCase();
     const nav = document.querySelector('.app-nav');
     const links = [...document.querySelectorAll('[data-role-allow]')];
     links.forEach(el => {
