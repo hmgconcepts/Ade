@@ -6,7 +6,7 @@
 <title>Academic Records • God of Seed Academy</title>
 <meta name="description" content="God of Seed Academy — Academic Records. Free school management platform by HMG Concepts.">
 <meta name="keywords" content="God of Seed Academy, school management, GOSA, HMG Concepts">
-<meta name="theme-color" content="#0f172a">
+<meta name="theme-color" content="#0506ae">
 <link rel="icon" type="image/png" href="assets/img/logo.png">
 <link rel="manifest" href="manifest.json">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -23,7 +23,7 @@
    Final UI/UX repair: stable, professional navigation for every layout.
    Prevents scattered icons/labels, fixes unsupported layout IDs, and keeps
    large module lists readable on desktop and mobile. */
-:root{--primary:#0f172a;--primary-dark:#0f172a;--primary-light:#2563eb;--accent:#2563eb;--gradient:linear-gradient(135deg,#0f172a,#2563eb);--gradient-dark:linear-gradient(135deg,#0f172a,#2563eb);--font:'Manrope',system-ui,sans-serif;--sc-primary:#0f172a;--sc-accent:#2563eb}
+:root{--primary:#0506ae;--primary-dark:#0506ae;--primary-light:#964eec;--accent:#964eec;--gradient:linear-gradient(135deg,#0506ae,#964eec);--gradient-dark:linear-gradient(135deg,#0506ae,#964eec);--font:'Plus Jakarta Sans',system-ui,sans-serif;--sc-primary:#0506ae;--sc-accent:#964eec}
 body{font-family:var(--font)!important;background:#f8fafc}
 .app-layout{display:flex;min-height:100vh;background:#f8fafc;color:#0f172a}
 .app-sidebar{width:286px;flex-shrink:0;background:rgba(255,255,255,.98);border-right:1px solid #e2e8f0;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow:hidden;z-index:40;box-shadow:0 10px 25px rgba(15,23,42,.04)}
@@ -59,7 +59,7 @@ body:not([data-role-ready="1"]) .app-nav a[data-role-allow]{display:none!importa
 @media(min-width:901px){.app-topbar .mobile-toggle{display:none}}
 </style>
 </head>
-<body data-theme="theme9" data-school="God of Seed Academy" data-font="manrope">
+<body data-theme="theme15" data-school="God of Seed Academy" data-font="plusjakarta">
 
 <div id="notif-bell" class="notif-bell" title="Notifications" data-chatbot>
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
@@ -190,7 +190,7 @@ body:not([data-role-ready="1"]) .app-nav a[data-role-allow]{display:none!importa
         </a><a href="sow.html" data-module-id="sow" data-role-allow="super_admin admin principal proprietor head_teacher bursar staff teacher" class="">
           <span class="app-nav-icon">📋</span>
           <span>Scheme</span>
-        </a><a href="messages.html" data-module-id="messages" data-role-allow="super_admin admin principal proprietor head_teacher bursar staff teacher" class="">
+        </a><a href="messages.html" data-module-id="messages" data-role-allow="super_admin admin principal proprietor head_teacher bursar staff teacher parent student" class="">
           <span class="app-nav-icon">📱</span>
           <span>Messaging</span>
         </a><a href="announcements.html" data-module-id="announcements" data-role-allow="super_admin admin principal proprietor head_teacher bursar staff teacher parent student" class="">
@@ -334,9 +334,6 @@ body:not([data-role-ready="1"]) .app-nav a[data-role-allow]{display:none!importa
         </a><a href="developer.html" data-module-id="developer" data-role-allow="super_admin admin principal proprietor head_teacher bursar staff teacher parent student" class="">
           <span class="app-nav-icon">👨‍💻</span>
           <span>About the Developer</span>
-        </a><a href="activity_log.html" data-module-id="activity_log" data-role-allow="super_admin admin principal proprietor head_teacher bursar" class="">
-          <span class="app-nav-icon">🧮</span>
-          <span>Activity Log</span>
         </a><a href="lesson_plans.html" data-module-id="lesson_plans" data-role-allow="super_admin admin principal proprietor head_teacher bursar staff teacher" class="">
           <span class="app-nav-icon">🗒️</span>
           <span>Lesson Plans</span>
@@ -349,6 +346,9 @@ body:not([data-role-ready="1"]) .app-nav a[data-role-allow]{display:none!importa
         </a><a href="substitutions.html" data-module-id="substitutions" data-role-allow="super_admin admin principal proprietor head_teacher bursar staff teacher" class="">
           <span class="app-nav-icon">🔁</span>
           <span>Substitutions</span>
+        </a><a href="activity_log.html" data-module-id="activity_log" data-role-allow="super_admin admin principal proprietor head_teacher bursar" class="">
+          <span class="app-nav-icon">🧮</span>
+          <span>Activity Log</span>
         </a><a href="inbox.html" data-module-id="inbox" data-role-allow="super_admin admin principal proprietor head_teacher bursar staff teacher parent student" class="">
           <span class="app-nav-icon">💬</span>
           <span>Inbox</span>
@@ -361,6 +361,9 @@ body:not([data-role-ready="1"]) .app-nav a[data-role-allow]{display:none!importa
         </a><a href="lost_found.html" data-module-id="lost_found" data-role-allow="super_admin admin principal proprietor head_teacher bursar staff teacher parent student" class="">
           <span class="app-nav-icon">🔍</span>
           <span>Lost &amp; Found</span>
+        </a><a href="reports.html" data-module-id="reports" data-role-allow="super_admin admin principal proprietor head_teacher bursar staff teacher" class="">
+          <span class="app-nav-icon">📈</span>
+          <span>Reports</span>
         </a><a href="school_calendar.html" data-module-id="school_calendar" data-role-allow="super_admin admin principal proprietor head_teacher bursar staff teacher parent student" class="">
           <span class="app-nav-icon">📅</span>
           <span>Calendar</span>
@@ -373,9 +376,6 @@ body:not([data-role-ready="1"]) .app-nav a[data-role-allow]{display:none!importa
         </a><a href="donations.html" data-module-id="donations" data-role-allow="super_admin admin principal proprietor head_teacher bursar parent" class="">
           <span class="app-nav-icon">💝</span>
           <span>Donations</span>
-        </a><a href="reports.html" data-module-id="reports" data-role-allow="super_admin admin principal proprietor head_teacher bursar staff teacher" class="">
-          <span class="app-nav-icon">📈</span>
-          <span>Reports</span>
         </a><a href="student-profile.html" data-module-id="student-profile" data-role-allow="super_admin admin principal proprietor head_teacher bursar staff teacher parent student" class="">
           <span class="app-nav-icon">👤</span>
           <span>Student Profile</span>
@@ -385,6 +385,12 @@ body:not([data-role-ready="1"]) .app-nav a[data-role-allow]{display:none!importa
         </a><a href="academic-records.html" data-module-id="academic-records" data-role-allow="super_admin admin principal proprietor head_teacher bursar staff teacher" class="">
           <span class="app-nav-icon">📄</span>
           <span>Academic Records</span>
+        </a><a href="verify-certificate.html" data-module-id="verify-certificate" data-role-allow="any all public super_admin admin principal proprietor head_teacher bursar staff teacher parent student" class="">
+          <span class="app-nav-icon">🔎</span>
+          <span>Verify Certificate</span>
+        </a><a href="teacher-overview.html" data-module-id="teacher-overview" data-role-allow="super_admin admin principal proprietor head_teacher bursar" class="">
+          <span class="app-nav-icon">👨‍🏫</span>
+          <span>Teacher Overview</span>
         </a><a href="feature-guide.html" data-module-id="feature-guide" data-role-allow="super_admin admin principal proprietor head_teacher bursar staff teacher parent student" class="">
           <span class="app-nav-icon">📘</span>
           <span>Feature Guide</span>
@@ -465,6 +471,7 @@ const AR={ rows:[],
  async generate(){ if(!sb){toast('Database not configured','warning');return;} const type=document.getElementById('ar-type').value, cls=document.getElementById('ar-class').value, sub=document.getElementById('ar-subject').value, term=document.getElementById('ar-term').value, ses=document.getElementById('ar-session').value, stu=document.getElementById('ar-student').value; let q=sb.from('results').select('*').limit(2000); if(cls)q=q.eq('class',cls); if(sub&&type==='subject')q=q.eq('subject',sub); if(term)q=q.eq('term',term); if(ses)q=q.eq('session',ses); if(stu)q=q.ilike('student_name','%'+stu+'%'); const {data,error}=await q; if(error){toast(error.message,'danger');return;} this.rows=data||[]; document.getElementById('ar-output').innerHTML=this.html(type,cls,sub,term,ses); },
  html(type,cls,sub,term,ses){ const sc=window.SCHOOL||{}; const title=type==='student'?'STUDENT RECORD CARD':(type==='subject'?'SUBJECT BROADSHEET':'CLASS BROADSHEET'); const rows=this.rows; const byStudent={}; rows.forEach(r=>{(byStudent[r.student_name]=byStudent[r.student_name]||[]).push(r);}); if(type==='student'){ const name=Object.keys(byStudent)[0]||''; return '<div class="print-record"><h2>'+esc(sc.name||'School')+'</h2><h3>'+title+'</h3><p>Class: '+esc(cls)+' · Term: '+esc(term)+' · Session: '+esc(ses)+'</p><h3>'+esc(name)+'</h3>'+this.table(rows,['subject','ca1','ca2','ca3','exam','total','grade','remark'])+'<p style="margin-top:24px">Attendance: ______ / ______ &nbsp; Conduct: __________ &nbsp; Principal Signature: __________</p></div>'; } if(type==='subject'){ return '<div class="print-record"><h2>'+esc(sc.name||'School')+'</h2><h3>'+title+' — '+esc(sub)+'</h3><p>Class: '+esc(cls)+' · Term: '+esc(term)+' · Session: '+esc(ses)+'</p>'+this.table(rows,['student_name','ca1','ca2','ca3','exam','total','grade','remark'])+'</div>'; } const names=Object.keys(byStudent).sort(); return '<div class="print-record"><h2>'+esc(sc.name||'School')+'</h2><h3>'+title+'</h3><p>Class: '+esc(cls)+' · Term: '+esc(term)+' · Session: '+esc(ses)+'</p><table><thead><tr><th>Student</th><th>Subjects</th><th>Total</th><th>Average</th><th>Position</th><th>Remark</th></tr></thead><tbody>'+names.map((n,i)=>{const rr=byStudent[n], t=rr.reduce((a,b)=>a+Number(b.total||((Number(b.ca1)||0)+(Number(b.ca2)||0)+(Number(b.ca3)||0)+(Number(b.exam)||0))),0), avg=rr.length?Math.round(t/rr.length*10)/10:0; return '<tr><td>'+esc(n)+'</td><td>'+rr.length+'</td><td>'+t+'</td><td>'+avg+'</td><td>'+(i+1)+'</td><td></td></tr>';}).join('')+'</tbody></table></div>'; },
  table(rows,cols){ return '<table><thead><tr>'+cols.map(c=>'<th>'+esc(c.replace(/_/g,' '))+'</th>').join('')+'</tr></thead><tbody>'+rows.map(r=>'<tr>'+cols.map(c=>'<td>'+esc(r[c]??'')+'</td>').join('')+'</tr>').join('')+'</tbody></table>'; },
- print(){ const el=document.getElementById('ar-output'); const w=window.open('','_blank'); w.document.write('<html><head><title>Academic Record</title><style>body{font-family:Arial,sans-serif;padding:20px;color:#111}.print-record{text-align:center}table{width:100%;border-collapse:collapse;margin-top:12px}th,td{border:1px solid #111;padding:5px;font-size:12px}th{background:#eee}@media print{button{display:none}}</style></head><body>'+el.innerHTML+'<script>window.onload=()=>window.print()<\/script></body></html>'); w.document.close(); }
+ async pullAssessments(){ if(!sb){toast('Database not configured','warning');return;} let made=0; const rows=[]; try{ const r=await sb.from('cbt_results').select('*,cbt_exams(subject,class,term,session,report_column,max_score)').limit(5000); (r.data||[]).forEach(x=>{const e=x.cbt_exams||{}; rows.push({student_name:x.student_name,subject:e.subject||'CBT',class:x.student_class||e.class,term:e.term,session:e.session,ca1:null,ca2:null,ca3:null,exam:Number(x.percent)||0,grade:'',remark:'CBT '+(x.score||0)+'/'+(x.total||0),assessment_source:'cbt',assessment_ref:x.id});}); }catch(e){} try{ const r=await sb.from('reading_scores').select('*').limit(5000); (r.data||[]).forEach(x=>rows.push({student_name:x.student_name,subject:x.subject||'Digital Library',class:x.class,term:x.term,session:x.session,ca3:Number(x.score)||0,remark:'Digital Library score',assessment_source:'digital_library',assessment_ref:x.id})); }catch(e){} for(const row of rows){ if(!row.student_name)continue; try{ const res=await sb.from('results').upsert(row,{onConflict:'assessment_source,assessment_ref'}); if(!res.error)made++; }catch(e){} } toast('Pulled '+made+' assessment score(s) into academic records.','success',6000); this.generate(); },
+ print(){ const el=document.getElementById('ar-output'); const w=window.open('','_blank'); var sig=localStorage.getItem('sc-signature-url')||'', pn=localStorage.getItem('sc-principal-name')||'Principal'; var sign=sig?'<div style="margin-top:35px;text-align:center"><img src="'+sig+'" style="max-width:160px;max-height:70px;object-fit:contain"><br><b>'+pn+'</b><br>Official Signature</div>':''; w.document.write('<html><head><title>Academic Record</title><style>body{font-family:Arial,sans-serif;padding:20px;color:#111}.print-record{text-align:center}table{width:100%;border-collapse:collapse;margin-top:12px}th,td{border:1px solid #111;padding:5px;font-size:12px}th{background:#eee}@media print{button{display:none}}</style></head><body>'+el.innerHTML+sign+'<script>window.onload=()=>window.print()<\/script></body></html>'); w.document.close(); }
 };
 </script></body></html>
