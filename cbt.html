@@ -6,7 +6,7 @@
 <title>CBT / Online Exams • God of Seed Academy</title>
 <meta name="description" content="God of Seed Academy — CBT / Online Exams. Free school management platform by HMG Concepts.">
 <meta name="keywords" content="God of Seed Academy, school management, GOSA, HMG Concepts">
-<meta name="theme-color" content="#0506ae">
+<meta name="theme-color" content="#3730a3">
 <link rel="icon" type="image/png" href="assets/img/logo.png">
 <link rel="manifest" href="manifest.json">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -23,7 +23,7 @@
    Final UI/UX repair: stable, professional navigation for every layout.
    Prevents scattered icons/labels, fixes unsupported layout IDs, and keeps
    large module lists readable on desktop and mobile. */
-:root{--primary:#0506ae;--primary-dark:#0506ae;--primary-light:#964eec;--accent:#964eec;--gradient:linear-gradient(135deg,#0506ae,#964eec);--gradient-dark:linear-gradient(135deg,#0506ae,#964eec);--font:'Plus Jakarta Sans',system-ui,sans-serif;--sc-primary:#0506ae;--sc-accent:#964eec}
+:root{--primary:#3730a3;--primary-dark:#3730a3;--primary-light:#0284c7;--accent:#0284c7;--gradient:linear-gradient(135deg,#3730a3,#0284c7);--gradient-dark:linear-gradient(135deg,#3730a3,#0284c7);--font:'Manrope',system-ui,sans-serif;--sc-primary:#3730a3;--sc-accent:#0284c7}
 body{font-family:var(--font)!important;background:#f8fafc}
 .app-layout{display:flex;min-height:100vh;background:#f8fafc;color:#0f172a}
 .app-sidebar{width:286px;flex-shrink:0;background:rgba(255,255,255,.98);border-right:1px solid #e2e8f0;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow:hidden;z-index:40;box-shadow:0 10px 25px rgba(15,23,42,.04)}
@@ -59,7 +59,7 @@ body:not([data-role-ready="1"]) .app-nav a[data-role-allow]{display:none!importa
 @media(min-width:901px){.app-topbar .mobile-toggle{display:none}}
 </style>
 </head>
-<body data-theme="theme15" data-school="God of Seed Academy" data-font="plusjakarta">
+<body data-theme="theme3" data-school="God of Seed Academy" data-font="manrope">
 
 <div id="notif-bell" class="notif-bell" title="Notifications" data-chatbot>
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
@@ -358,33 +358,30 @@ body:not([data-role-ready="1"]) .app-nav a[data-role-allow]{display:none!importa
         </a><a href="parent_meeting.html" data-module-id="parent_meeting" data-role-allow="super_admin admin principal proprietor head_teacher bursar staff teacher parent" class="">
           <span class="app-nav-icon">👥</span>
           <span>PTA Meeting</span>
-        </a><a href="lost_found.html" data-module-id="lost_found" data-role-allow="super_admin admin principal proprietor head_teacher bursar staff teacher parent student" class="">
-          <span class="app-nav-icon">🔍</span>
-          <span>Lost &amp; Found</span>
-        </a><a href="reports.html" data-module-id="reports" data-role-allow="super_admin admin principal proprietor head_teacher bursar staff teacher" class="">
-          <span class="app-nav-icon">📈</span>
-          <span>Reports</span>
         </a><a href="school_calendar.html" data-module-id="school_calendar" data-role-allow="super_admin admin principal proprietor head_teacher bursar staff teacher parent student" class="">
           <span class="app-nav-icon">📅</span>
           <span>Calendar</span>
+        </a><a href="lost_found.html" data-module-id="lost_found" data-role-allow="super_admin admin principal proprietor head_teacher bursar staff teacher parent student" class="">
+          <span class="app-nav-icon">🔍</span>
+          <span>Lost &amp; Found</span>
         </a><a href="book_request.html" data-module-id="book_request" data-role-allow="super_admin admin principal proprietor head_teacher bursar staff teacher student" class="">
           <span class="app-nav-icon">📖</span>
           <span>Book Request</span>
-        </a><a href="payments_online.html" data-module-id="payments_online" data-role-allow="super_admin admin principal proprietor head_teacher bursar parent" class="">
-          <span class="app-nav-icon">💳</span>
-          <span>Online Pay</span>
         </a><a href="donations.html" data-module-id="donations" data-role-allow="super_admin admin principal proprietor head_teacher bursar parent" class="">
           <span class="app-nav-icon">💝</span>
           <span>Donations</span>
+        </a><a href="payments_online.html" data-module-id="payments_online" data-role-allow="super_admin admin principal proprietor head_teacher bursar parent" class="">
+          <span class="app-nav-icon">💳</span>
+          <span>Online Pay</span>
+        </a><a href="reports.html" data-module-id="reports" data-role-allow="super_admin admin principal proprietor head_teacher bursar staff teacher" class="">
+          <span class="app-nav-icon">📈</span>
+          <span>Reports</span>
         </a><a href="student-profile.html" data-module-id="student-profile" data-role-allow="super_admin admin principal proprietor head_teacher bursar staff teacher parent student" class="">
           <span class="app-nav-icon">👤</span>
           <span>Student Profile</span>
         </a><a href="cbt-exam.html" data-module-id="cbt-exam" data-role-allow="any all public super_admin admin principal proprietor head_teacher bursar staff teacher parent student" class="">
           <span class="app-nav-icon">🧪</span>
           <span>Take Exam</span>
-        </a><a href="academic-records.html" data-module-id="academic-records" data-role-allow="super_admin admin principal proprietor head_teacher bursar staff teacher" class="">
-          <span class="app-nav-icon">📄</span>
-          <span>Academic Records</span>
         </a><a href="verify-certificate.html" data-module-id="verify-certificate" data-role-allow="any all public super_admin admin principal proprietor head_teacher bursar staff teacher parent student" class="">
           <span class="app-nav-icon">🔎</span>
           <span>Verify Certificate</span>
@@ -526,55 +523,79 @@ const CBTUI = {
   },
   promptGuide(){
     const txt = [
-      'SCHOOL CONNECT CBT PRO — STRUCTURED QUESTION-BANK PROMPT (NO RUNTIME AI API)',
+      'HMG ACADEMY CBT PRO — AI QUESTION BANK PROMPT TEMPLATES (DOWNLOADABLE CSV OUTPUT)',
       '',
-      'ROLE',
-      'Act as a senior examiner, curriculum specialist, psychometric reviewer and classroom teacher. Produce a clean CSV question bank that can be pasted directly into School Connect CBT.',
+      'Important: the platform itself does not use a paid AI API. These prompts are for manual use in any AI chat tool (ChatGPT, Claude, Gemini, Copilot). The output must be a downloadable CSV file/text that the teacher uploads manually.',
       '',
-      'ASSESSMENT CONTEXT',
-      'School: [SCHOOL NAME]',
-      'Subject: [SUBJECT]',
-      'Class/Level: [CLASS]',
-      'Term/Session: [TERM] [SESSION]',
-      'Topic(s): [TOPICS]',
-      'Exam type: [Quiz / CA / Assignment / Project / Practical / Exam / Entrance]',
-      'Number of questions: [COUNT]',
-      'Duration: [MINUTES]',
-      'Learner standard: Nigerian curriculum plus international assessment best practice.',
+      '====================================================================',
+      '1. SIMPLE QUESTION PROMPT (Standard 11 core types / Multiple Choice & True/False)',
+      '====================================================================',
+      'You are an expert [CURRICULUM] [SUBJECT] teacher with strong assessment-design experience.',
+      'Generate a 60-question CSV question bank for HMG Academy CBT Pro.',
+      'Class: [CLASS] | Subject: [SUBJECT] | Topic: [TOPIC] | Curriculum: [CURRICULUM]',
       '',
-      'OUTPUT FORMAT — CSV ONLY',
-      'Return DOWNLOADABLE CSV only. Do not add markdown, numbering, commentary, code fences, or explanations outside the CSV.',
-      'Use this exact header:',
-      'Question,A,B,C,D,CorrectAnswer,Explanation,Type,Tolerance,Unit,Accept,MRQ_AON,Pairs,Items,Difficulty,Tags,Section',
+      'IMPORTANT:',
+      '- Output downloadable CSV only. No markdown table. No explanation outside the CSV.',
+      '- First line must be exactly:',
+      'Question,A,B,C,D,CorrectAnswer,Explanation,Type,Tolerance,Unit,Accept,MRQ_AON,Pairs,Items',
+      '- Use UTF-8 characters correctly. Wrap every CSV field in double-quotes.',
+      '- Escape inner JSON double-quotes inside CSV cells as two double-quotes.',
+      '- Do not use paid API instructions. This is for manual copy/download only.',
       '',
-      'SUPPORTED TYPES',
-      'mcq, truefalse, numeric, short, mrq, essay, matching, ordering, cloze, categorization, multinumeric, assertion_reason, case_study, image_mcq, matrix, hot_text, code',
+      'QUESTION TYPE DISTRIBUTION:',
+      'mcq=45, tf=15 (or customize as needed)',
+      '- mcq: Col2–5: four options, Col6: A/B/C/D, Col8: mcq',
+      '- tf: Col2: True, Col3: False, Col4–5: blank, Col6: A if true, B if false, Col8: tf',
       '',
-      'QUALITY RULES',
-      '1. Questions must be age-appropriate, unambiguous and syllabus-aligned.',
-      '2. Mix cognitive levels: recall, understanding, application, analysis and problem-solving.',
-      '3. Balance difficulty: 30% Easy, 50% Medium, 20% Hard.',
-      '4. Avoid repeated questions, duplicated answers and trick wording.',
-      '5. Every auto-gradable item must have a correct answer.',
-      '6. Every item must include a concise Explanation for teacher review and student feedback.',
-      '7. Use Tags for topic/subtopic and Section for paper section.',
+      '====================================================================',
+      '2. INTERMEDIATE QUESTION PROMPT (Full CBT v3 Enterprise Bank, all 17 question types)',
+      '====================================================================',
+      'You are an expert [CURRICULUM] [SUBJECT] teacher, examiner, and assessment designer.',
+      'Generate a 60-question CSV question bank for HMG Academy CBT Pro v3.',
+      'Class: [CLASS] | Subject: [SUBJECT] | Topic: [TOPIC]',
+      'Curriculum/Exam standard: [CURRICULUM OR EXAM BODY]',
       '',
-      'TYPE RULES',
-      '- mcq: options A-D; CorrectAnswer must be A/B/C/D.',
-      '- truefalse: use A=True, B=False; CorrectAnswer A or B.',
-      '- mrq: CorrectAnswer like A|C. If MRQ_AON is TRUE, award all-or-nothing; otherwise partial credit is allowed.',
-      '- numeric: CorrectAnswer is a number; Tolerance may be 0.01 etc; Unit optional.',
-      '- short: CorrectAnswer is preferred text; Accept can contain alternatives separated by |.',
-      '- matching: put pairs in Pairs as left:right|left:right.',
-      '- ordering: put correct sequence in Items as JSON array or pipe list.',
-      '- cloze: use blanks like [blank1]; put answers in Items JSON.',
-      '- categorization/matrix/hot_text/code/case_study: use Items JSON, valid and compact.',
-      '- essay: CorrectAnswer may contain marking guide; not auto-graded.',
+      'IMPORTANT OUTPUT RULES:',
+      '- Output CSV only. No markdown table. No commentary before or after the CSV.',
+      '- First line must be exactly:',
+      'Question,A,B,C,D,CorrectAnswer,Explanation,Type,Tolerance,Unit,Accept,MRQ_AON,Pairs,Items',
+      '- Wrap every CSV field in double-quotes. Escape inner JSON double-quotes as two double-quotes.',
       '',
-      'FINAL CHECK',
-      'Before returning, silently verify that the CSV has the exact header, all rows have the same number of columns, quotes are escaped properly, and no markdown is included.',
-      ''
-    ].join('\n');
+      'QUESTION TYPE DISTRIBUTION — EXACTLY 60 QUESTIONS:',
+      'mcq=10, tf=5, mrq=5, short=5, numeric=5, matching=4, ordering=4, cloze=4, categorization=3, multi_numeric=3, essay=2, assertion_reason=3, case_study=2, image_mcq=1, matrix=2, hot_text=1, code=1',
+      '',
+      'SUPPORTED TYPES AND RULES:',
+      '- mrq: Col2–5: options, Col6: sorted comma list (e.g. A,C), Col8: mrq, Col12: false for partial credit or true for all-or-nothing',
+      '- short: Col6: primary answer, Col11: accepted alternates separated by | (e.g. H₂O|water), Col8: short',
+      '- numeric: Col6: number only, Col9: tolerance (e.g. 0 or 0.05), Col10: unit if needed, Col8: numeric',
+      '- matching: Col13: JSON array of pairs [{"left":"Term","right":"Def"}], Col8: matching',
+      '- ordering: Col14: JSON array of items ["First","Second"], Col8: ordering',
+      '- cloze: blanks using ___, Col14: JSON array of answers ["mass|m"], Col8: cloze',
+      '- essay: Col11: keywords separated by |, Col14: {"min_words":30,"keywords":["trust"]}, Col8: essay',
+      '- categorization: Col14: JSON array [{"item":"Sodium","category":"Metal"}], Col8: categorization',
+      '- multi_numeric: Col14: JSON array [{"label":"x","answer":3,"tolerance":0}], Col8: multi_numeric',
+      '- assertion_reason: Col1: instruction, Col2: assertion, Col3: reason, Col6: A/B/C/D/E, Col8: assertion_reason',
+      '- case_study: Col1: question, Col2–5: options, Col6: A/B/C/D, Col8: case_study, Col14: {"passage":"..."}',
+      '- image_mcq: Col1: question, Col2–5: options, Col6: A/B/C/D, Col8: image_mcq, Col11: same-site image path or data URI',
+      '- matrix: Col11: shared choices (True|False), Col14: [{"statement":"Water boils at 100°C.","answer":"True"}], Col8: matrix',
+      '- hot_text: Col14: [{"text":"2","correct":true}], Col8: hot_text',
+      '- code: Col10: language (Python), Col11: keywords, Col14: {"language":"Python","keywords":["def"]}, Col8: code',
+      '',
+      '====================================================================',
+      '3. ADVANCED QUESTION PROMPT (Generate only advanced question types)',
+      '====================================================================',
+      'You are an expert [SUBJECT] examiner.',
+      'Generate a 25-question CSV bank for HMG Academy CBT Pro using only these types: assertion_reason, case_study, image_mcq, matrix, hot_text, code, matching, ordering, cloze, categorization, multi_numeric.',
+      'Class: [CLASS] | Subject: [SUBJECT] | Topic: [TOPIC]',
+      '',
+      'Output CSV only. No markdown table. First line must be exactly:',
+      'Question,A,B,C,D,CorrectAnswer,Explanation,Type,Tolerance,Unit,Accept,MRQ_AON,Pairs,Items',
+      'Wrap all CSV cells in double-quotes. Escape inner JSON quotes as two double-quotes.',
+      'Distribution: assertion_reason=4, case_study=3, image_mcq=2, matrix=3, hot_text=2, code=2, matching=3, ordering=2, cloze=2, categorization=1, multi_numeric=1',
+      '',
+      'Now output the downloadable CSV only.'
+    ].join('
+');
     openModal('Structured CBT Question Prompt', '<textarea class="form-input" rows="18" style="font-family:monospace">'+esc(txt)+'</textarea><p style="color:var(--gray-600)">Copy this into any AI assistant manually, then paste the returned CSV into School Connect. The platform itself uses no AI API.</p>', '<button class="btn btn-outline" onclick="closeModal()">Close</button><button class="btn btn-primary" id="copy-cbt-prompt">Copy prompt</button>');
     setTimeout(()=>{ const b=document.getElementById('copy-cbt-prompt'); if(b) b.onclick=()=>{ navigator.clipboard&&navigator.clipboard.writeText(document.querySelector('#modal-body textarea').value); toast('Prompt copied','success'); }; },0);
   },
