@@ -12,10 +12,18 @@ const App = {
     App.bindUI();
     App.applyStoredTheme();
     const page = currentPage();
-    // On login/public pages we DO NOT run auth-gating or redirect — this was
-    // the v7 bug that broke the login page bootstrap and caused redirect loops.
+    // On login/public pages we do not redirect, but we still bind the public-page helpers.
+    // This keeps install prompts, notifications shells and helper widgets working.
     if (PUBLIC_PAGES.includes(page)) {
       App.initAuthTabs();
+      try { if (window.PWAInstall) PWAInstall.init(); } catch(_) {}
+      try { if (window.Notifications) {
+        if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').then(reg => Notifications.init(sb, reg));
+        else Notifications.init(sb);
+      }} catch(_) {}
+      try { if (window.Super) Super.init(sb, window.SCHOOL); } catch(_) {}
+      try { if (window.Enterprise) Enterprise.init(sb); } catch(_) {}
+      try { if (window.CRUD) CRUD.init(sb); } catch(_) {}
       return;
     }
     App.applyRoleVisibility();
@@ -56,6 +64,9 @@ const App = {
         window.SC_PROFILE = Object.assign({ id: user.id, email: user.email }, data || {}, { role, status, full_name: name });
         document.querySelectorAll('[data-admin-only]').forEach(el => el.style.display = isAdmin ? '' : 'none');
         document.querySelectorAll('[data-staff-only]').forEach(el => el.style.display = isStaff ? '' : 'none');
+        document.querySelectorAll('[data-parent-only]').forEach(el => el.style.display = role === 'parent' ? '' : 'none');
+        document.querySelectorAll('[data-student-only]').forEach(el => el.style.display = role === 'student' ? '' : 'none');
+        document.querySelectorAll('[data-family-only]').forEach(el => el.style.display = ['parent','student'].includes(role) ? '' : 'none');
         document.querySelectorAll('[data-signout]').forEach(el => el.style.display = '');
         App.applyRoleDashboard(role, { full_name:name, email:user.email, role });
         App.applyRoleNav(role);

@@ -11,9 +11,43 @@
 const CRUD = {
   sb: null,
   WRITE_RULES: {
-    students: ['staff','teacher'], staff:['admin'], classes:['staff','teacher'], subjects:['staff','teacher'], attendance:['staff','teacher'], results:['staff','teacher'],
-    academic_records:['staff','teacher'], cbt:['staff','teacher'], assignments:['staff','teacher'], timetable:['staff','teacher'], timetable_generator:['staff','teacher'],
-    academic_setup:['admin'], approvals:['admin'], admin_data:['admin'], finance:['admin'], payroll:['admin'], hr:['admin'], inventory:['admin'], compliance:['admin'], storage:['admin'], settings:['admin']
+    students:['admin','staff','teacher'],
+    staff:['admin'],
+    parents:['admin'],
+    classes:['admin','staff','teacher'],
+    subjects:['admin','staff','teacher'],
+    attendance:['admin','staff','teacher'],
+    results:['admin','staff','teacher'],
+    academic_records:['admin','staff','teacher'],
+    cbt:['admin','staff','teacher'],
+    assignments:['admin','staff','teacher'],
+    timetable:['admin','staff','teacher'],
+    timetable_generator:['admin','staff','teacher'],
+    announcements:['admin','staff','teacher'],
+    events:['admin','staff','teacher'],
+    gallery:['admin','staff','teacher'],
+    library:['admin','staff','teacher'],
+    digital_library:['admin','staff','teacher'],
+    directory:['admin'],
+    departments:['admin'],
+    broadcast:['admin','staff','teacher'],
+    complaints:['admin','staff','teacher','parent','student'],
+    leave:['admin','staff','teacher'],
+    visitors:['admin','staff','teacher'],
+    hostel:['admin','staff','teacher'],
+    transport:['admin','staff','teacher'],
+    alumni:['admin'],
+    promotion:['admin'],
+    finance:['admin'],
+    fees:['admin'],
+    inventory:['admin'],
+    inbox:['admin','staff','teacher','parent','student'],
+    messages:['admin','staff','teacher','parent'],
+    report_cards:['admin','staff','teacher'],
+    certificates:['admin','staff','teacher'],
+    lesson_plans:['admin','staff','teacher'],
+    sow:['admin','staff','teacher'],
+    academic_setup:['admin'], approvals:['admin'], admin_data:['admin'], payroll:['admin'], hr:['admin'], compliance:['admin'], storage:['admin'], settings:['admin']
   },
   init(supabaseClient) { this.sb = supabaseClient || (typeof sb !== 'undefined' ? sb : null); },
 
@@ -409,9 +443,12 @@ const CRUD = {
 
   canWrite(moduleId) {
     const role = String((window.App && App.currentRole) || '').toLowerCase();
-    if (window.App && App.isAdminRole && App.isAdminRole(role)) return true;
     const key = String(moduleId || '').replace(/-/g,'_');
     const allow = this.WRITE_RULES[key];
+    if (window.App && App.isAdminRole && App.isAdminRole(role)) {
+      if (!allow) return true;
+      return allow.includes('admin') || allow.includes(role);
+    }
     if (!allow) return ['staff','teacher'].includes(role);
     return allow.includes(role);
   },
