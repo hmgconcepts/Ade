@@ -7,7 +7,7 @@ Welcome to the official, enterprise-grade School Connect management platform gen
 This fully-featured platform adapts to traditional and modern build deployments. It comes built-in with features like offline access, push notifications, row-level security, and a beautiful UI tailored to your specific branding choices.
 
 **School Motto:** Excellence in Learning and Character
-**Branding Theme:** theme17 (Primary: #5310f1, Accent: #2366b2)
+**Branding Theme:** theme15 (Primary: #0506ae, Accent: #964eec)
 **Typography:** Plus Jakarta Sans
 
 ---
@@ -122,18 +122,18 @@ Your platform is pre-configured with the following modules:
 - **Compliance & Audit**
 - **About the Developer**
 - **Lesson Plans & Curriculum**
+- **Substitute / Cover**
 - **Behaviour & PBIS Points**
 - **Special Education / Support**
-- **Substitute / Cover**
 - **Audit / Activity Log**
 - **IT / Help Desk**
-- **PTA Meeting Scheduler**
-- **Reports & Export**
-- **School Calendar**
 - **Lost & Found**
+- **School Calendar**
+- **Reports & Export**
 - **Book Reservation**
-- **Online Fee Payments**
 - **Fundraising & Donations**
+- **Online Fee Payments**
+- **PTA Meeting Scheduler**
 - **In-App Inbox**
 
 ---
