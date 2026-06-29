@@ -1,14 +1,14 @@
-# God of Seed Academy — Comprehensive School Connect Platform
+# God of Seed Academy  — Comprehensive School Connect Platform
 
-Welcome to the official, enterprise-grade School Connect management platform generated specifically for **God of Seed Academy**. This deployment package provides everything needed to establish a digital footprint for your institution, complete with progressive web application capabilities, advanced role-based access, and enterprise-level modules.
+Welcome to the official, enterprise-grade School Connect management platform generated specifically for **God of Seed Academy **. This deployment package provides everything needed to establish a digital footprint for your institution, complete with progressive web application capabilities, advanced role-based access, and enterprise-level modules.
 
 ## 🚀 Overview
 
 This fully-featured platform adapts to traditional and modern build deployments. It comes built-in with features like offline access, push notifications, row-level security, and a beautiful UI tailored to your specific branding choices.
 
-**School Motto:** Excellence in Learning and Character
+**School Motto:** N/A
 **Branding Theme:** theme15 (Primary: #0506ae, Accent: #964eec)
-**Typography:** Sora
+**Typography:** Plus Jakarta Sans
 
 ---
 
@@ -127,12 +127,14 @@ Your platform is pre-configured with the following modules:
 - **Special Education / Support**
 - **Audit / Activity Log**
 - **In-App Inbox**
-- **PTA Meeting Scheduler**
 - **IT / Help Desk**
+- **PTA Meeting Scheduler**
+- **Reports & Export**
 - **Lost & Found**
 - **School Calendar**
-- **Online Fee Payments**
+- **Book Reservation**
 - **Fundraising & Donations**
+- **Online Fee Payments**
 
 ---
 

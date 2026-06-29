@@ -1,4 +1,4 @@
-# 🩺 Troubleshooting — God of Seed Academy
+# 🩺 Troubleshooting — God of Seed Academy 
 
 Common problems and their exact fixes. Find your symptom below.
 
@@ -54,8 +54,8 @@ Check each item:
 ### ❌ My uploaded school logo does not show (a default badge appears instead)
 **Cause (old version):** pages hard-coded `logo.svg` while your uploaded PNG/JPG was
 saved as `logo.png`/`logo.jpg`, so the `<img>` pointed at a file that did not exist.
-**Fix (this version):** every page now references **`logo.png`** — the exact
-file that was packaged. Your logo file in this ZIP is **`assets/img/logo.png`**.
+**Fix (this version):** every page now references **`logo.svg`** — the exact
+file that was packaged. Your logo file in this ZIP is **`assets/img/logo.svg`**.
 To change it later, replace that file (keep the same name) and re-upload.
 
 ---

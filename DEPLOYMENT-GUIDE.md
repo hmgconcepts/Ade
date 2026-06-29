@@ -1,4 +1,4 @@
-# 🚀 Deployment Guide — God of Seed Academy
+# 🚀 Deployment Guide — God of Seed Academy 
 
 This guide walks you from a freshly downloaded ZIP to a **live, working school
 portal** in about 15 minutes, using only **free tools** (Supabase free tier +
@@ -20,7 +20,7 @@ free static hosting). No credit card. No monthly fees. No AI APIs.
 
 1. Go to **https://supabase.com** → click **Start your project** → sign in with GitHub.
 2. Click **New project**.
-   - **Name:** GOSA
+   - **Name:** God of Seed Academy 
    - **Database Password:** click *Generate a password* and **save it somewhere safe**.
    - **Region:** pick the one closest to your school.
    - Click **Create new project** and wait ~2 minutes for it to finish provisioning.
