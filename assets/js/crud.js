@@ -10,6 +10,11 @@
    ==================================================================== */
 const CRUD = {
   sb: null,
+  WRITE_RULES: {
+    students: ['staff','teacher'], staff:['admin'], classes:['staff','teacher'], subjects:['staff','teacher'], attendance:['staff','teacher'], results:['staff','teacher'],
+    academic_records:['staff','teacher'], cbt:['staff','teacher'], assignments:['staff','teacher'], timetable:['staff','teacher'], timetable_generator:['staff','teacher'],
+    academic_setup:['admin'], approvals:['admin'], admin_data:['admin'], finance:['admin'], payroll:['admin'], hr:['admin'], inventory:['admin'], compliance:['admin'], storage:['admin'], settings:['admin']
+  },
   init(supabaseClient) { this.sb = supabaseClient || (typeof sb !== 'undefined' ? sb : null); },
 
   /* Field schema per module. Only columns a human edits are listed; the DB
@@ -402,6 +407,15 @@ const CRUD = {
     return { table:'module_records', title:g.title, generic:true, module:moduleId, cols };
   },
 
+  canWrite(moduleId) {
+    const role = String((window.App && App.currentRole) || '').toLowerCase();
+    if (window.App && App.isAdminRole && App.isAdminRole(role)) return true;
+    const key = String(moduleId || '').replace(/-/g,'_');
+    const allow = this.WRITE_RULES[key];
+    if (!allow) return ['staff','teacher'].includes(role);
+    return allow.includes(role);
+  },
+
   /* Render the list table for a module page */
   async renderList(moduleId) {
     const d = this.def(moduleId);
@@ -417,12 +431,13 @@ const CRUD = {
       ? this.sb.from(d.table).select('*').eq('module', d.module).order('created_at', { ascending: false }).limit(500)
       : this.sb.from(d.table).select('*').order('created_at', { ascending: false }).limit(500));
     const cols = d.cols;
+    const writable = this.canWrite(moduleId) && !d.readOnly;
     const cellVal = (row, c) => c.key.indexOf('data.') === 0 ? ((row.data || {})[c.key.slice(5)]) : row[c.key];
-    const head = '<tr>' + cols.map(c => '<th>' + esc(c.label) + '</th>').join('') + (d.readOnly ? '' : '<th data-staff-only>Actions</th>') + '</tr>';
+    const head = '<tr>' + cols.map(c => '<th>' + esc(c.label) + '</th>').join('') + (writable ? '<th>Actions</th>' : '') + '</tr>';
     tableEl.querySelector('thead').innerHTML = head;
     const tb = tableEl.querySelector('tbody');
-    if (error) { tb.innerHTML = '<tr><td colspan="' + (cols.length + 1) + '">' + esc(error.message) + '</td></tr>'; return; }
-    if (!data || !data.length) { tb.innerHTML = '<tr><td colspan="' + (cols.length + 1) + '" style="color:var(--gray-500)">No records yet. Click “+ Add new”.</td></tr>'; return; }
+    if (error) { tb.innerHTML = '<tr><td colspan="' + (cols.length + (writable ? 1 : 0)) + '">' + esc(error.message) + '</td></tr>'; return; }
+    if (!data || !data.length) { tb.innerHTML = '<tr><td colspan="' + (cols.length + (writable ? 1 : 0)) + '" style="color:var(--gray-500)">No records yet.' + (writable ? ' Click “+ Add new”.' : '') + '</td></tr>'; return; }
     const isLinkCol = (key) => /(_link|link|media_url|photo_url|video|image|thumbnail|read_link|drive)$/i.test(key) || /^(media_url|read_link|drive_link|photo_url)$/i.test(key);
     tb.innerHTML = data.map(row => '<tr>' + cols.map(c => {
       let v = cellVal(row, c);
@@ -434,8 +449,8 @@ const CRUD = {
         return '<td><a href="' + esc(String(v)) + '" target="_blank" rel="noopener">🔗 link</a></td>';
       }
       return '<td>' + esc(String(v == null ? '' : v)).slice(0, 80) + '</td>';
-    }).join('') + (d.readOnly ? '' :
-      '<td style="white-space:nowrap" data-staff-only>' +
+    }).join('') + (!writable ? '' :
+      '<td style="white-space:nowrap">' +
         (moduleId === 'students' ? '<a class="btn btn-sm btn-primary" href="student-profile.html?student=' + row.id + '">Dashboard</a> ' : '') +
         (moduleId === 'staff' ? '<a class="btn btn-sm btn-primary" href="teacher-overview.html?staff=' + row.id + '">Teacher overview</a> ' : '') +
         ((moduleId === 'payroll' || moduleId === 'hr') ? '<button class="btn btn-sm btn-primary" onclick="CRUD.printPayslip(\'' + row.id + '\')">Payslip</button> ' : '') +
@@ -482,6 +497,7 @@ const CRUD = {
   async openForm(moduleId, id) {
     const d = this.def(moduleId);
     if (!d) { toast('This module has no editable form.', 'warning'); return; }
+    if (!this.canWrite(moduleId)) { toast('Read-only for your role on this page.', 'warning', 5000); return; }
     if (!this.sb) { toast('Database not configured (add Supabase keys in assets/js/config.js).', 'warning', 6000); return; }
     let row = {};
     if (id) { const { data } = await this.sb.from(d.table).select('*').eq('id', id).maybeSingle(); row = data || {}; }
@@ -563,6 +579,7 @@ const CRUD = {
 
   async save(moduleId, id) {
     const d = this.def(moduleId);
+    if (!this.canWrite(moduleId)) { toast('Read-only for your role on this page.', 'warning', 5000); return; }
     if (!d || !this.sb) { toast('Database not configured.', 'warning'); return; }
     const payload = {};
     const dataObj = {};
@@ -636,6 +653,7 @@ const CRUD = {
 
   async remove(moduleId, id) {
     const d = this.def(moduleId);
+    if (!this.canWrite(moduleId)) { toast('Read-only for your role on this page.', 'warning', 5000); return; }
     if (!d || !this.sb) return;
     if (window.App && !App.isAdminRole(App.currentRole)) {
       const { data: row } = await this.sb.from(d.table).select('*').eq('id', id).maybeSingle();

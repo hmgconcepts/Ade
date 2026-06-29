@@ -123,8 +123,8 @@ const App = {
     const r = String(role || '').toLowerCase();
     const set = new Set([r]);
     if (r === 'teacher') set.add('staff');
-    if (App.isAdminRole(r)) ['admin','super_admin','principal','proprietor','head_teacher','bursar','staff','teacher','parent','student','any','all','public'].forEach(x => set.add(x));
     if (r === 'staff') set.add('teacher');
+    if (App.isAdminRole(r)) ['admin','super_admin','principal','proprietor','head_teacher','bursar','any','all','public'].forEach(x => set.add(x));
     return set;
   },
 
@@ -140,15 +140,17 @@ const App = {
   applyRoleNav(role) {
     document.body.dataset.roleReady = '1';
     document.body.dataset.currentRole = String(role || '').toLowerCase();
-    const nav = document.querySelector('.app-nav');
     const links = [...document.querySelectorAll('[data-role-allow]')];
+    const isAdmin = App.isAdminRole(role);
     links.forEach(el => {
       const ok = App.canAccessAllowList(el.getAttribute('data-role-allow'), role);
-      // Security/UI repair v4 / FINAL v2: do NOT hide modules with display:none.
-      // Admin/Super Admin can see all for oversight. Staff, parents and students
-      // see their permitted pages, while restricted pages receive nav-locked styling.
-      el.style.display = '';
-      el.classList.toggle('nav-locked', !ok);
+      if (isAdmin) {
+        el.style.display = '';
+        el.classList.toggle('nav-locked', !ok);
+      } else {
+        el.style.display = ok ? '' : 'none';
+        el.classList.remove('nav-locked');
+      }
       if (!ok) {
         el.setAttribute('aria-disabled', 'true');
         el.setAttribute('title', 'Locked for your role (' + role + ')');
@@ -157,24 +159,50 @@ const App = {
         el.removeAttribute('title');
       }
     });
+    App.applyVisibilityTokens(role);
     App.ensureNavNotBlank(role);
     App.enforceCurrentPageAccess(role);
+  },
+
+  applyVisibilityTokens(role) {
+    const allow = (selector, yes) => document.querySelectorAll(selector).forEach(el => el.style.display = yes ? '' : 'none');
+    const r = String(role || '').toLowerCase();
+    const isAdmin = App.isAdminRole(r);
+    const isStaff = ['staff','teacher'].includes(r);
+    const isParent = r === 'parent';
+    const isStudent = r === 'student';
+    allow('[data-admin-only]', isAdmin);
+    allow('[data-staff-only]', isAdmin || isStaff);
+    allow('[data-parent-only]', isParent);
+    allow('[data-student-only]', isStudent);
+    allow('[data-family-only]', isParent || isStudent);
+    allow('[data-nonadmin-only]', !isAdmin);
+    document.querySelectorAll('[data-readonly-role]').forEach(el => {
+      const list = String(el.getAttribute('data-readonly-role') || '').split(/s+/).filter(Boolean);
+      const yes = list.includes(r) || (isStaff && list.includes('staff')) || (isAdmin && list.includes('admin'));
+      el.disabled = !!yes;
+      el.setAttribute('aria-disabled', yes ? 'true' : 'false');
+      if (yes) el.title = 'Read-only for your role'; else el.removeAttribute('title');
+    });
   },
 
   ensureNavNotBlank(role) {
     const nav = document.querySelector('.app-nav');
     if (!nav) return;
-    const links = [...nav.querySelectorAll('a')];
-    if (links.some(a => !a.classList.contains('nav-locked'))) return;
-    const safe = new Set(['dashboard.html','notifications.html','inbox.html','feature-guide.html','about.html','contact.html']);
-    links.forEach(a => { if (safe.has((a.getAttribute('href')||'').toLowerCase())) { a.style.display = ''; a.classList.remove('nav-locked'); } });
+    const links = [...nav.querySelectorAll('a')].filter(a => a.style.display !== 'none');
+    if (links.length) return;
+    const safe = new Set(['dashboard.html','notifications.html','feature-guide.html','about.html','contact.html']);
+    [...nav.querySelectorAll('a')].forEach(a => { if (safe.has((a.getAttribute('href')||'').toLowerCase())) { a.style.display = ''; a.classList.remove('nav-locked'); } });
   },
 
   enforceCurrentPageAccess(role) {
+    const shell = document.querySelector('.app-layout[data-require-role]');
+    const required = shell ? shell.getAttribute('data-require-role') : '';
     const active = document.querySelector('.app-nav a.active');
-    if (!active) return;
-    if (!active.classList.contains('nav-locked')) return;
-    const pageTitle = active.textContent.trim() || 'this page';
+    const blockedByNav = active && active.style.display === 'none';
+    const blockedByRole = required && !App.canAccessAllowList(required, role);
+    if (!blockedByNav && !blockedByRole && !(active && active.classList.contains('nav-locked'))) return;
+    const pageTitle = (active && active.textContent.trim()) || document.title || 'this page';
     const content = document.querySelector('.app-content');
     if (content) {
       content.innerHTML = '<div class="card" style="max-width:760px;margin:30px auto;text-align:center;border-color:#fecaca;background:#fff7f7"><h2>🔒 Restricted Page</h2><p style="color:var(--gray-700)">Your role does not have permission to use <strong>'+esc(pageTitle)+'</strong>. This protects student data, finance records, staff records and admin controls.</p><p style="color:var(--gray-600)">If you believe you need this page, ask an Admin/Super Admin to review your account role in Approvals.</p><a class="btn btn-primary" href="dashboard.html">Return to your dashboard</a> <a class="btn btn-outline" href="feature-guide.html">Read feature guide</a></div>';
