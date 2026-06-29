@@ -823,8 +823,8 @@ create policy "results_select_v5" on public.results for select using (
   public.is_staff(auth.uid()) or public.is_parent_of(auth.uid(), student_id)
 );
 create policy "results_insert_v5" on public.results for insert with check (public.is_staff(auth.uid()));
-create policy "results_update_v5" on public.results for update using (public.is_admin(auth.uid()) or teacher_id = auth.uid() or (select full_name from public.profiles where id = auth.uid()) = teacher) with check (public.is_admin(auth.uid()) or teacher_id = auth.uid() or (select full_name from public.profiles where id = auth.uid()) = teacher);
-create policy "results_delete_v5" on public.results for delete using (public.is_admin(auth.uid()) or teacher_id = auth.uid() or (select full_name from public.profiles where id = auth.uid()) = teacher);
+create policy "results_update_v5" on public.results for update using (public.is_admin(auth.uid()) or teacher_id = auth.uid()) with check (public.is_admin(auth.uid()) or teacher_id = auth.uid());
+create policy "results_delete_v5" on public.results for delete using (public.is_admin(auth.uid()) or teacher_id = auth.uid());
 
 -- ---- Attendance: parents see own children; staff manage ----
 drop policy if exists "att_read"  on public.attendance;
@@ -847,8 +847,8 @@ create policy "results_select_v5" on public.results for select using (
   public.is_staff(auth.uid()) or public.is_parent_of(auth.uid(), student_id)
 );
 create policy "results_insert_v5" on public.results for insert with check (public.is_staff(auth.uid()));
-create policy "results_update_v5" on public.results for update using (public.is_admin(auth.uid()) or teacher_id = auth.uid() or (select full_name from public.profiles where id = auth.uid()) = teacher) with check (public.is_admin(auth.uid()) or teacher_id = auth.uid() or (select full_name from public.profiles where id = auth.uid()) = teacher);
-create policy "results_delete_v5" on public.results for delete using (public.is_admin(auth.uid()) or teacher_id = auth.uid() or (select full_name from public.profiles where id = auth.uid()) = teacher);
+create policy "results_update_v5" on public.results for update using (public.is_admin(auth.uid()) or teacher_id = auth.uid()) with check (public.is_admin(auth.uid()) or teacher_id = auth.uid());
+create policy "results_delete_v5" on public.results for delete using (public.is_admin(auth.uid()) or teacher_id = auth.uid());
 
 -- ---- Conduct / Health / Behaviour / Support: parents see own; staff manage ----
 drop policy if exists "cond_read"  on public.conduct;
