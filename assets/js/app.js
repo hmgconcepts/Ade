@@ -144,13 +144,18 @@ const App = {
     const links = [...document.querySelectorAll('[data-role-allow]')];
     links.forEach(el => {
       const ok = App.canAccessAllowList(el.getAttribute('data-role-allow'), role);
-      // Security/UI repair v4: do NOT show every module to every role.
+      // Security/UI repair v4 / FINAL v2: do NOT hide modules with display:none.
       // Admin/Super Admin can see all for oversight. Staff, parents and students
-      // see only their permitted pages. Direct URL access is also blocked below.
-      el.style.display = ok ? '' : 'none';
-      el.classList.toggle('nav-locked', false);
-      el.removeAttribute('aria-disabled');
-      el.removeAttribute('title');
+      // see their permitted pages, while restricted pages receive nav-locked styling.
+      el.style.display = '';
+      el.classList.toggle('nav-locked', !ok);
+      if (!ok) {
+        el.setAttribute('aria-disabled', 'true');
+        el.setAttribute('title', 'Locked for your role (' + role + ')');
+      } else {
+        el.removeAttribute('aria-disabled');
+        el.removeAttribute('title');
+      }
     });
     App.ensureNavNotBlank(role);
     App.enforceCurrentPageAccess(role);
@@ -160,15 +165,15 @@ const App = {
     const nav = document.querySelector('.app-nav');
     if (!nav) return;
     const links = [...nav.querySelectorAll('a')];
-    if (links.some(a => a.style.display !== 'none')) return;
+    if (links.some(a => !a.classList.contains('nav-locked'))) return;
     const safe = new Set(['dashboard.html','notifications.html','inbox.html','feature-guide.html','about.html','contact.html']);
-    links.forEach(a => { if (safe.has((a.getAttribute('href')||'').toLowerCase())) a.style.display = ''; });
+    links.forEach(a => { if (safe.has((a.getAttribute('href')||'').toLowerCase())) { a.style.display = ''; a.classList.remove('nav-locked'); } });
   },
 
   enforceCurrentPageAccess(role) {
     const active = document.querySelector('.app-nav a.active');
     if (!active) return;
-    if (active.style.display !== 'none') return;
+    if (!active.classList.contains('nav-locked')) return;
     const pageTitle = active.textContent.trim() || 'this page';
     const content = document.querySelector('.app-content');
     if (content) {

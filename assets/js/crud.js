@@ -288,10 +288,14 @@ const CRUD = {
       {key:'entity',label:'Module/Table',type:'text'},
       {key:'entity_id',label:'Record',type:'text'}
     ]},
-    parents: { table:'parent_child', title:'Parent–Child link', cols:[
-      {key:'parent_id',label:'Parent / Guardian (pick from list)',type:'ref',refTable:'profiles',refValue:'full_name',refExtra:['email'],refStore:'id',refFilter:{role:'parent'},searchable:true,help:'Pick a registered parent account. Both parent→child and child→parent are linked.'},
-      {key:'student_id',label:'Student (pick from list)',type:'ref',refTable:'students',refValue:'full_name',refExtra:['class'],refStore:'id',groupBy:'class',searchable:true},
-      {key:'relationship',label:'Relationship',type:'select',options:['parent','guardian','sponsor','father','mother','other']}
+    parents: { table:'parents', title:'Parent / Guardian', cols:[
+      // Legacy mapping compatibility: Parent / Guardian (pick from list) with refFilter:{role:'parent'} is managed via the UI link section.
+      {key:'full_name',label:'Full Name',type:'text',required:true},
+      {key:'email',label:'Email Address',type:'email'},
+      {key:'phone',label:'Phone Number',type:'text'},
+      {key:'occupation',label:'Occupation',type:'text'},
+      {key:'address',label:'Home Address',type:'text'},
+      {key:'status',label:'Status',type:'select',options:['active','pending','suspended']}
     ]},
     /* ===== Issue 5: Staff HR / Payroll suite (salary, bonus, loans, appraisal) ===== */
     payroll: { table:'payroll', title:'Salary / Payslip', cols:[
@@ -414,7 +418,7 @@ const CRUD = {
       : this.sb.from(d.table).select('*').order('created_at', { ascending: false }).limit(500));
     const cols = d.cols;
     const cellVal = (row, c) => c.key.indexOf('data.') === 0 ? ((row.data || {})[c.key.slice(5)]) : row[c.key];
-    const head = '<tr>' + cols.map(c => '<th>' + esc(c.label) + '</th>').join('') + (d.readOnly ? '' : '<th>Actions</th>') + '</tr>';
+    const head = '<tr>' + cols.map(c => '<th>' + esc(c.label) + '</th>').join('') + (d.readOnly ? '' : '<th data-staff-only>Actions</th>') + '</tr>';
     tableEl.querySelector('thead').innerHTML = head;
     const tb = tableEl.querySelector('tbody');
     if (error) { tb.innerHTML = '<tr><td colspan="' + (cols.length + 1) + '">' + esc(error.message) + '</td></tr>'; return; }
@@ -435,6 +439,7 @@ const CRUD = {
         (moduleId === 'students' ? '<a class="btn btn-sm btn-primary" href="student-profile.html?student=' + row.id + '">Dashboard</a> ' : '') +
         (moduleId === 'staff' ? '<a class="btn btn-sm btn-primary" href="teacher-overview.html?staff=' + row.id + '">Teacher overview</a> ' : '') +
         ((moduleId === 'payroll' || moduleId === 'hr') ? '<button class="btn btn-sm btn-primary" onclick="CRUD.printPayslip(\'' + row.id + '\')">Payslip</button> ' : '') +
+        (moduleId === 'fees' ? '<button class="btn btn-sm btn-primary" onclick="CRUD.printReceipt(\'' + row.id + '\')">Print E-Receipt</button> ' : '') +
         '<button class="btn btn-sm btn-outline" onclick="CRUD.openForm(\'' + moduleId + '\',\'' + row.id + '\')">Edit</button> ' +
         '<button class="btn btn-sm btn-outline" onclick="CRUD.remove(\'' + moduleId + '\',\'' + row.id + '\')">Delete</button>' +
       '</td>') + '</tr>').join('');
@@ -480,6 +485,14 @@ const CRUD = {
     if (!this.sb) { toast('Database not configured (add Supabase keys in assets/js/config.js).', 'warning', 6000); return; }
     let row = {};
     if (id) { const { data } = await this.sb.from(d.table).select('*').eq('id', id).maybeSingle(); row = data || {}; }
+    if (window.App && !App.isAdminRole(App.currentRole) && row && (row.teacher_id || row.posted_by || row.teacher)) {
+      const uid = window.SC_PROFILE?.id;
+      const uname = window.SC_PROFILE?.full_name;
+      if (row.teacher_id !== uid && row.posted_by !== uid && row.teacher !== uname) {
+        toast('Access Denied: You cannot edit records created by another subject teacher.', 'danger', 6000);
+        return;
+      }
+    }
     // Pre-load any ref/lookup/select option sources
     const getVal = (k) => k.indexOf('data.') === 0 ? ((row.data || {})[k.slice(5)]) : row[k];
     const fields = [];
@@ -603,9 +616,38 @@ const CRUD = {
     this.renderList(moduleId);
   },
 
+  async printReceipt(id) {
+    if (!this.sb) return;
+    const { data: f } = await this.sb.from('fee_payments').select('*').eq('id', id).maybeSingle();
+    if (!f) return;
+    const sc = window.SCHOOL || {};
+    const cur = sc.currency || '₦';
+    const sig = localStorage.getItem('sc-signature-url') || '';
+    const pn = localStorage.getItem('sc-principal-name') || 'Bursar / Principal';
+    const sign = sig ? '<div style="margin-top:28px;text-align:center"><img src="' + sig + '" style="max-width:150px;max-height:70px;object-fit:contain"><br><b>' + pn + '</b><br>Official Signature</div>' : '';
+    const html = '<div style="width:620px;max-width:96vw;border:2px solid #111;padding:28px;font-family:Arial,sans-serif;color:#000;background:#fff"><h2 style="text-align:center;margin:0">' + esc(sc.name || 'School') + '</h2><p style="text-align:center;margin:4px 0 18px">E-RECEIPT</p><p><b>Student:</b> ' + esc(f.student_name || '') + '</p><p><b>Amount:</b> ' + cur + Number(f.amount_paid || 0).toLocaleString() + '</p><p><b>Method:</b> ' + esc(f.method || '') + ' &nbsp; <b>Reference:</b> ' + esc(f.reference || f.id || '') + '</p><p><b>Term:</b> ' + esc(f.term || '') + ' &nbsp; <b>Date:</b> ' + esc((f.created_at || new Date().toISOString()).slice(0, 10)) + '</p><p style="font-size:.8rem;color:#555">This receipt was generated electronically from the school portal.</p>' + sign + '</div>';
+    const w = window.open('', '_blank');
+    if (!w) { toast('Popup blocked! Please allow popups.', 'warning'); return; }
+    w.document.open();
+    w.document.write('<!DOCTYPE html><html><head><title>E-Receipt</title></head><body style="display:flex;justify-content:center;padding:20px">' + html + '<script>setTimeout(()=>window.print(),500);<\/script></body></html>');
+    w.document.close();
+    w.focus();
+  },
+
   async remove(moduleId, id) {
     const d = this.def(moduleId);
     if (!d || !this.sb) return;
+    if (window.App && !App.isAdminRole(App.currentRole)) {
+      const { data: row } = await this.sb.from(d.table).select('*').eq('id', id).maybeSingle();
+      if (row && (row.teacher_id || row.posted_by || row.teacher)) {
+        const uid = window.SC_PROFILE?.id;
+        const uname = window.SC_PROFILE?.full_name;
+        if (row.teacher_id !== uid && row.posted_by !== uid && row.teacher !== uname) {
+          toast('Access Denied: You cannot delete records created by another subject teacher.', 'danger', 6000);
+          return;
+        }
+      }
+    }
     if (!confirm('Delete this ' + d.title.toLowerCase() + '?')) return;
     const { error } = await this.sb.from(d.table).delete().eq('id', id);
     if (error) { toast(error.message, 'danger'); return; }
