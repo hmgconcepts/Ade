@@ -23,7 +23,7 @@
    Final UI/UX repair: stable, professional navigation for every layout.
    Prevents scattered icons/labels, fixes unsupported layout IDs, and keeps
    large module lists readable on desktop and mobile. */
-:root{--primary:#3730a3;--primary-dark:#3730a3;--primary-light:#0284c7;--accent:#0284c7;--gradient:linear-gradient(135deg,#3730a3,#0284c7);--gradient-dark:linear-gradient(135deg,#3730a3,#0284c7);--font:'Manrope',system-ui,sans-serif;--sc-primary:#3730a3;--sc-accent:#0284c7}
+:root{--primary:#3730a3;--primary-dark:#3730a3;--primary-light:#0284c7;--accent:#0284c7;--gradient:linear-gradient(135deg,#3730a3,#0284c7);--gradient-dark:linear-gradient(135deg,#3730a3,#0284c7);--font:'Plus Jakarta Sans',system-ui,sans-serif;--sc-primary:#3730a3;--sc-accent:#0284c7}
 body{font-family:var(--font)!important;background:#f8fafc}
 .app-layout{display:flex;min-height:100vh;background:#f8fafc;color:#0f172a}
 .app-sidebar{width:286px;flex-shrink:0;background:rgba(255,255,255,.98);border-right:1px solid #e2e8f0;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow:hidden;z-index:40;box-shadow:0 10px 25px rgba(15,23,42,.04)}
@@ -59,7 +59,7 @@ body:not([data-role-ready="1"]) .app-nav a[data-role-allow]{display:none!importa
 @media(min-width:901px){.app-topbar .mobile-toggle{display:none}}
 </style>
 </head>
-<body data-theme="theme3" data-school="God of Seed Academy" data-font="manrope">
+<body data-theme="theme3" data-school="God of Seed Academy" data-font="plusjakarta">
 
 <div id="notif-bell" class="notif-bell" title="Notifications" data-chatbot>
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
@@ -337,15 +337,15 @@ body:not([data-role-ready="1"]) .app-nav a[data-role-allow]{display:none!importa
         </a><a href="lesson_plans.html" data-module-id="lesson_plans" data-role-allow="super_admin admin principal proprietor head_teacher bursar staff teacher" class="">
           <span class="app-nav-icon">🗒️</span>
           <span>Lesson Plans</span>
-        </a><a href="behaviour.html" data-module-id="behaviour" data-role-allow="super_admin admin principal proprietor head_teacher bursar staff teacher parent student" class="">
-          <span class="app-nav-icon">🏅</span>
-          <span>Behaviour</span>
-        </a><a href="support_plans.html" data-module-id="support_plans" data-role-allow="super_admin admin principal proprietor head_teacher bursar staff teacher parent student" class="">
-          <span class="app-nav-icon">🧩</span>
-          <span>Support Plans</span>
         </a><a href="substitutions.html" data-module-id="substitutions" data-role-allow="super_admin admin principal proprietor head_teacher bursar staff teacher" class="">
           <span class="app-nav-icon">🔁</span>
           <span>Substitutions</span>
+        </a><a href="support_plans.html" data-module-id="support_plans" data-role-allow="super_admin admin principal proprietor head_teacher bursar staff teacher parent student" class="">
+          <span class="app-nav-icon">🧩</span>
+          <span>Support Plans</span>
+        </a><a href="behaviour.html" data-module-id="behaviour" data-role-allow="super_admin admin principal proprietor head_teacher bursar staff teacher parent student" class="">
+          <span class="app-nav-icon">🏅</span>
+          <span>Behaviour</span>
         </a><a href="activity_log.html" data-module-id="activity_log" data-role-allow="super_admin admin principal proprietor head_teacher bursar" class="">
           <span class="app-nav-icon">🧮</span>
           <span>Activity Log</span>
@@ -355,27 +355,27 @@ body:not([data-role-ready="1"]) .app-nav a[data-role-allow]{display:none!importa
         </a><a href="helpdesk.html" data-module-id="helpdesk" data-role-allow="super_admin admin principal proprietor head_teacher bursar staff teacher parent student" class="">
           <span class="app-nav-icon">🆘</span>
           <span>Help Desk</span>
-        </a><a href="parent_meeting.html" data-module-id="parent_meeting" data-role-allow="super_admin admin principal proprietor head_teacher bursar staff teacher parent" class="">
-          <span class="app-nav-icon">👥</span>
-          <span>PTA Meeting</span>
-        </a><a href="school_calendar.html" data-module-id="school_calendar" data-role-allow="super_admin admin principal proprietor head_teacher bursar staff teacher parent student" class="">
-          <span class="app-nav-icon">📅</span>
-          <span>Calendar</span>
         </a><a href="lost_found.html" data-module-id="lost_found" data-role-allow="super_admin admin principal proprietor head_teacher bursar staff teacher parent student" class="">
           <span class="app-nav-icon">🔍</span>
           <span>Lost &amp; Found</span>
+        </a><a href="school_calendar.html" data-module-id="school_calendar" data-role-allow="super_admin admin principal proprietor head_teacher bursar staff teacher parent student" class="">
+          <span class="app-nav-icon">📅</span>
+          <span>Calendar</span>
         </a><a href="book_request.html" data-module-id="book_request" data-role-allow="super_admin admin principal proprietor head_teacher bursar staff teacher student" class="">
           <span class="app-nav-icon">📖</span>
           <span>Book Request</span>
-        </a><a href="donations.html" data-module-id="donations" data-role-allow="super_admin admin principal proprietor head_teacher bursar parent" class="">
-          <span class="app-nav-icon">💝</span>
-          <span>Donations</span>
         </a><a href="payments_online.html" data-module-id="payments_online" data-role-allow="super_admin admin principal proprietor head_teacher bursar parent" class="">
           <span class="app-nav-icon">💳</span>
           <span>Online Pay</span>
+        </a><a href="donations.html" data-module-id="donations" data-role-allow="super_admin admin principal proprietor head_teacher bursar parent" class="">
+          <span class="app-nav-icon">💝</span>
+          <span>Donations</span>
         </a><a href="reports.html" data-module-id="reports" data-role-allow="super_admin admin principal proprietor head_teacher bursar staff teacher" class="">
           <span class="app-nav-icon">📈</span>
           <span>Reports</span>
+        </a><a href="parent_meeting.html" data-module-id="parent_meeting" data-role-allow="super_admin admin principal proprietor head_teacher bursar staff teacher parent" class="">
+          <span class="app-nav-icon">👥</span>
+          <span>PTA Meeting</span>
         </a><a href="student-profile.html" data-module-id="student-profile" data-role-allow="super_admin admin principal proprietor head_teacher bursar staff teacher parent student" class="">
           <span class="app-nav-icon">👤</span>
           <span>Student Profile</span>
@@ -424,33 +424,39 @@ body:not([data-role-ready="1"]) .app-nav a[data-role-allow]{display:none!importa
     <div class="app-content">
       
       <div class="card" style="margin-bottom:16px;background:#eef2ff;border-color:#c7d2fe">
-      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;cursor:pointer" onclick="var b=document.getElementById('pg-more');b.style.display=b.style.display==='none'?'block':'none'">
-        <div><strong>ℹ️ What is this page?</strong> <span style="color:var(--gray-700)">The Scheme of Work — each teacher&#39;s termly topic plan.</span></div>
-        <span style="color:var(--primary)">▼</span>
+        <h3 style="margin-top:0">📋 Scheme of Work (SOW) — Two-Stage Tracking</h3>
+        <p style="color:var(--gray-700);line-height:1.7;margin:0">Use this dedicated interface to manage curriculum delivery in two distinct stages: <strong>Stage 1: Content Setup</strong> (teachers enter weekly lesson topics and save) and <strong>Stage 2: Delivery Confirmation</strong> (teachers confirm topics are taught under admin/HOD supervision).</p>
       </div>
-      <div id="pg-more" style="display:none;margin-top:10px">
-        <p style="margin:4px 0;color:var(--gray-700)"><strong>Who uses it:</strong> Teachers fill it at term start; admin monitors coverage.</p>
-        <p style="margin:8px 0 4px;color:var(--gray-700)"><strong>How to use it:</strong></p>
-        <ol style="margin:0;padding-left:20px;color:var(--gray-700);line-height:1.7"><li>Add a row per week: subject, class, week number and topic.</li><li>Each week, tick <b>“Taught this week (confirm)”</b> as you cover a topic.</li><li>Admin can see covered vs uncovered topics at a glance.</li></ol>
-        
-        
-        <p style="margin:10px 0 0;font-size:.85rem;color:var(--gray-500)">Tip: click the <strong>ℹ️ Help</strong> button in the top bar, or the 💬 assistant, for the full explanation of any page.</p>
-      </div></div>
-      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px">
-        <button class="btn btn-primary" onclick="CRUD.openForm('sow')" data-staff-only>+ Add new</button>
-        <button class="btn btn-outline" onclick="CRUD.renderList('sow')">↻ Refresh</button>
-        <button class="btn btn-outline" onclick="CRUD.exportCSV('sow')" data-staff-only>⬇ Export CSV</button>
-        <button class="btn btn-outline" onclick="CRUD.exportPDF('sow')" data-staff-only>📄 Export PDF</button>
-        <button class="btn btn-outline" onclick="CRUD.importCSV('sow')" data-admin-only>⬆ Import CSV</button>
-        
-        
-        
-        
-        
+      <div class="card" style="margin-bottom:16px;background:#f8fafc;border:1px solid #e2e8f0">
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <button class="btn btn-primary" id="sow-tab-setup" onclick="SOWUI.switchTab('setup')">✏️ Stage 1: Enter Weekly Content</button>
+          <button class="btn btn-outline" id="sow-tab-confirm" onclick="SOWUI.switchTab('confirm')">✅ Stage 2: Delivery Confirmation</button>
+          <button class="btn btn-outline" onclick="SOWUI.load()">↻ Refresh</button>
+        </div>
       </div>
-      
-      <div class="table-wrap"><table id="sow-table"><thead><tr><th>Loading…</th></tr></thead><tbody><tr><td><span class="pulse">Loading…</span></td></tr></tbody></table></div>
-      <script>document.addEventListener('DOMContentLoaded',function(){ if(window.CRUD) CRUD.renderList('sow'); });</script>
+      <div id="sow-sec-setup" class="card" style="margin-bottom:16px">
+        <h3>✏️ Enter Weekly Scheme Content</h3>
+        <p style="color:var(--gray-600);margin-bottom:12px">Define your academic plan for the term. Topics entered here remain as 'pending' until confirmed in Stage 2.</p>
+        <div class="grid grid-3">
+          <div class="form-group"><label>Subject</label><select class="form-select" id="sow-sub"><option value="">— select subject —</option></select></div>
+          <div class="form-group"><label>Class</label><select class="form-select" id="sow-cls"><option value="">— select class —</option></select></div>
+          <div class="form-group"><label>Week Number</label><input class="form-input" type="number" id="sow-wk" value="1"></div>
+          <div class="form-group"><label>Term</label><select class="form-select" id="sow-term"><option value="">— select term —</option></select></div>
+          <div class="form-group"><label>Session</label><select class="form-select" id="sow-session"><option value="">— select session —</option></select></div>
+          <div class="form-group"><label>Assigned Teacher</label><select class="form-select" id="sow-teacher"><option value="">— select teacher —</option></select></div>
+        </div>
+        <div class="form-group"><label>Weekly Topic Description</label><textarea class="form-input" id="sow-topic" rows="3" placeholder="Introduction to basic formulas..."></textarea></div>
+        <button class="btn btn-primary" onclick="SOWUI.saveContent()">Save Scheme Content</button>
+      </div>
+      <div id="sow-sec-confirm" class="card" style="display:none;margin-bottom:16px;background:#f0fdf4;border-color:#bbf7d0">
+        <h3>✅ Delivery Confirmation (Admin Oversight)</h3>
+        <p style="color:var(--gray-700);margin-bottom:12px">Confirm that the scheduled weekly topics have been successfully taught in the classroom. Administrators and HODs use this section for instructional oversight and sign-off.</p>
+        <div id="sow-confirm-list"><span class="pulse">Loading confirmation records…</span></div>
+      </div>
+      <div class="card">
+        <h3>📋 Current Term Scheme of Work</h3>
+        <div id="sow-list"><span class="pulse">Loading scheme records…</span></div>
+      </div>
     </div>
     <footer style="padding:20px 28px;border-top:1px solid var(--gray-200);font-size:0.82rem;color:var(--gray-500);text-align:center">
       © 2026 God of Seed Academy · Built by <a href="https://cssadewale.pages.dev" target="_blank" rel="noopener">Adewale Samson Adeagbo</a> · Powered by <a href="https://hmgconcepts.pages.dev/" target="_blank" rel="noopener">HMG Concepts</a> · <a href="developer.html">About the developer</a>
@@ -476,4 +482,14 @@ body:not([data-role-ready="1"]) .app-nav a[data-role-allow]{display:none!importa
   if (window.Enterprise) Enterprise.init(sb);
   if (window.CRUD) CRUD.init(sb);
 </script>
-</body></html>
+<script>
+const SOWUI={ rows:[],
+  async init(){ if(!sb)return; try{ const [sub,cls,tch,term,ses]=await Promise.all([sb.from('subjects').select('name').order('name'),sb.from('classes').select('name').order('name'),sb.from('staff').select('full_name').order('full_name'),sb.from('lookups').select('value').eq('kind','term').order('position'),sb.from('lookups').select('value').eq('kind','session').order('position')]); const fill=(id,data,k)=>{const el=document.getElementById(id);if(el)el.innerHTML='<option value="">— select —</option>'+(data||[]).map(r=>'<option value="'+esc(r[k])+'">'+esc(r[k])+'</option>').join('');}; fill('sow-sub',sub.data,'name'); fill('sow-cls',cls.data,'name'); fill('sow-teacher',tch.data,'full_name'); fill('sow-term',term.data,'value'); fill('sow-session',ses.data,'value'); }catch(e){} this.load(); },
+  switchTab(t){ const s=document.getElementById('sow-sec-setup'), c=document.getElementById('sow-sec-confirm'); const bs=document.getElementById('sow-tab-setup'), bc=document.getElementById('sow-tab-confirm'); if(!s||!c)return; if(t==='setup'){s.style.display='block';c.style.display='none';bs.className='btn btn-primary';bc.className='btn btn-outline';}else{s.style.display='none';c.style.display='block';bc.className='btn btn-primary';bs.className='btn btn-outline';} },
+  async load(){ if(!sb){document.getElementById('sow-list').innerHTML='<p>Database not configured.</p>';return;} const {data,error}=await sb.from('scheme_of_work').select('*').order('week').limit(1000); if(error){document.getElementById('sow-list').innerHTML='<p>'+esc(error.message)+'</p>';return;} this.rows=data||[]; this.render(); },
+  render(){ const box=document.getElementById('sow-list'), cbox=document.getElementById('sow-confirm-list'); if(!box||!cbox)return; if(!this.rows.length){box.innerHTML='<p style="color:var(--gray-500)">No scheme of work recorded yet.</p>';cbox.innerHTML='<p style="color:var(--gray-500)">No scheme of work recorded yet.</p>';return;} box.innerHTML='<div class="table-wrap"><table><thead><tr><th>Week</th><th>Subject</th><th>Class</th><th>Topic</th><th>Teacher</th><th>Status</th><th>Confirmed</th><th>Actions</th></tr></thead><tbody>'+this.rows.map(r=>'<tr><td>Week '+r.week+'</td><td>'+esc(r.subject)+'</td><td>'+esc(r.class)+'</td><td>'+esc(r.topic)+'</td><td>'+esc(r.teacher)+'</td><td><span class="badge">'+esc(r.status||'pending')+'</span></td><td>'+(r.confirmed?'✅ Yes':'—')+'</td><td><button class="btn btn-sm btn-outline" onclick="SOWUI.del(\''+r.id+'\')">Delete</button></td></tr>').join('')+'</tbody></table></div>'; cbox.innerHTML='<div class="table-wrap"><table><thead><tr><th>Week</th><th>Subject</th><th>Class</th><th>Topic</th><th>Teacher</th><th>Status</th><th>Confirmation Action</th></tr></thead><tbody>'+this.rows.map(r=>'<tr><td>Week '+r.week+'</td><td>'+esc(r.subject)+'</td><td>'+esc(r.class)+'</td><td>'+esc(r.topic)+'</td><td>'+esc(r.teacher)+'</td><td><span class="badge '+(r.confirmed?'badge-success':'')+'">'+esc(r.status||'pending')+'</span></td><td>'+(r.confirmed?'<span style="color:#16a34a;font-weight:bold">✅ Confirmed Taught</span>':'<button class="btn btn-sm btn-primary" onclick="SOWUI.confirmTaught(\''+r.id+'\')">Confirm Taught ✅</button>')+'</td></tr>').join('')+'</tbody></table></div>'; },
+  async saveContent(){ if(!sb){toast('Database not configured','warning');return;} const row={subject:document.getElementById('sow-sub').value,class:document.getElementById('sow-cls').value,week:parseInt(document.getElementById('sow-wk').value)||1,term:document.getElementById('sow-term').value,session:document.getElementById('sow-session').value,teacher:document.getElementById('sow-teacher').value,topic:document.getElementById('sow-topic').value.trim(),status:'pending',confirmed:false}; if(!row.subject||!row.class||!row.topic){toast('Enter subject, class and topic','warning');return;} const {error}=await sb.from('scheme_of_work').insert(row); if(error){toast(error.message,'danger');return;} toast('Scheme content saved successfully','success'); document.getElementById('sow-topic').value=''; this.load(); },
+  async confirmTaught(id){ if(!sb)return; const {error}=await sb.from('scheme_of_work').update({status:'covered',confirmed:true,covered_at:new Date().toISOString().slice(0,10)}).eq('id',id); if(error){toast(error.message,'danger');return;} toast('✅ Topic confirmed as taught!','success'); this.load(); },
+  async del(id){ if(!sb)return; if(!confirm('Delete this scheme row?'))return; await sb.from('scheme_of_work').delete().eq('id',id); toast('Deleted','info'); this.load(); }
+}; document.addEventListener('DOMContentLoaded',()=>SOWUI.init()); SOWUI.init();
+</script></body></html>
