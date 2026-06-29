@@ -163,7 +163,7 @@ exception when undefined_table then
     subject text, class text, term text, session text,
     week int, topic text, status text default 'pending',
     confirmed boolean default false, confirmed_at timestamptz,
-    planned_at timestamptz default now(), covered_at date, teacher text,
+    planned_at timestamptz default now(), covered_at date, teacher text, confirmed boolean default false,
     created_at timestamptz default now()
   );
   alter table public.scheme_of_work enable row level security;

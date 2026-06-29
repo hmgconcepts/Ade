@@ -42,7 +42,7 @@ create table if not exists public.profiles (
   role text not null default 'student'
     check (role in ('admin','principal','proprietor','head_teacher','staff','parent','student','bursar')),
   status text not null default 'pending'
-    check (status in ('pending','approved','suspended')),
+    check (status in ('pending','approved','active','suspended')),
   photo_url text,
   campus text,
   created_at timestamptz not null default now(),
@@ -111,6 +111,20 @@ alter table public.subjects add column if not exists teacher_id uuid references 
 alter table public.subjects enable row level security;
 
 -- parent_child must exist BEFORE the is_parent_of() function is created.
+create table if not exists public.parents (
+  id uuid primary key default uuid_generate_v4(),
+  full_name text not null,
+  email text,
+  phone text,
+  occupation text,
+  address text,
+  status text default 'active',
+  created_at timestamptz default now()
+);
+alter table public.parents enable row level security;
+create policy "parents_read" on public.parents for select using (auth.role() = 'authenticated');
+create policy "parents_write" on public.parents for all using (public.is_staff(auth.uid()));
+
 create table if not exists public.parent_child (
   id uuid primary key default uuid_generate_v4(),
   parent_id uuid references public.profiles(id) on delete cascade,
@@ -169,7 +183,7 @@ create table if not exists public.scheme_of_work (
   id uuid primary key default uuid_generate_v4(),
   subject text, class text, term text, session text,
   week int, topic text, status text default 'pending',
-  covered_at date, teacher text,
+  covered_at date, teacher text, confirmed boolean default false,
   created_at timestamptz default now()
 );
 alter table public.scheme_of_work enable row level security;
@@ -719,7 +733,7 @@ returns boolean language sql security definer stable as $$
     select 1 from public.profiles
     where id = uid
       and role in ('admin','principal','proprietor','head_teacher','staff','bursar')
-      and status = 'approved'
+      and status in ('approved','active')
   );
 $$;
 
@@ -729,7 +743,7 @@ returns boolean language sql security definer stable as $$
     select 1 from public.profiles
     where id = uid
       and role in ('admin','principal','proprietor')
-      and status = 'approved'
+      and status in ('approved','active')
   );
 $$;
 
@@ -809,12 +823,8 @@ create policy "results_select_v5" on public.results for select using (
   public.is_staff(auth.uid()) or public.is_parent_of(auth.uid(), student_id)
 );
 create policy "results_insert_v5" on public.results for insert with check (public.is_staff(auth.uid()));
-create policy "results_update_v5" on public.results for update using (
-  public.is_admin(auth.uid()) or teacher_id = auth.uid()
-) with check (public.is_admin(auth.uid()) or teacher_id = auth.uid());
-create policy "results_delete_v5" on public.results for delete using (
-  public.is_admin(auth.uid()) or teacher_id = auth.uid()
-);
+create policy "results_update_v5" on public.results for update using (public.is_admin(auth.uid()) or teacher_id = auth.uid() or (select full_name from public.profiles where id = auth.uid()) = teacher) with check (public.is_admin(auth.uid()) or teacher_id = auth.uid() or (select full_name from public.profiles where id = auth.uid()) = teacher);
+create policy "results_delete_v5" on public.results for delete using (public.is_admin(auth.uid()) or teacher_id = auth.uid() or (select full_name from public.profiles where id = auth.uid()) = teacher);
 
 -- ---- Attendance: parents see own children; staff manage ----
 drop policy if exists "att_read"  on public.attendance;
@@ -837,12 +847,8 @@ create policy "results_select_v5" on public.results for select using (
   public.is_staff(auth.uid()) or public.is_parent_of(auth.uid(), student_id)
 );
 create policy "results_insert_v5" on public.results for insert with check (public.is_staff(auth.uid()));
-create policy "results_update_v5" on public.results for update using (
-  public.is_admin(auth.uid()) or teacher_id = auth.uid()
-) with check (public.is_admin(auth.uid()) or teacher_id = auth.uid());
-create policy "results_delete_v5" on public.results for delete using (
-  public.is_admin(auth.uid()) or teacher_id = auth.uid()
-);
+create policy "results_update_v5" on public.results for update using (public.is_admin(auth.uid()) or teacher_id = auth.uid() or (select full_name from public.profiles where id = auth.uid()) = teacher) with check (public.is_admin(auth.uid()) or teacher_id = auth.uid() or (select full_name from public.profiles where id = auth.uid()) = teacher);
+create policy "results_delete_v5" on public.results for delete using (public.is_admin(auth.uid()) or teacher_id = auth.uid() or (select full_name from public.profiles where id = auth.uid()) = teacher);
 
 -- ---- Conduct / Health / Behaviour / Support: parents see own; staff manage ----
 drop policy if exists "cond_read"  on public.conduct;
@@ -964,12 +970,12 @@ create policy "prom_all" on public.promotions for all using (public.is_staff(aut
 drop policy if exists "ap_read" on public.academic_periods;
 drop policy if exists "ap_write" on public.academic_periods;
 create policy "ap_read" on public.academic_periods for select using (auth.role() = 'authenticated');
-create policy "ap_write" on public.academic_periods for all using (public.is_admin(auth.uid())) with check (public.is_admin(auth.uid()));
+create policy "ap_write" on public.academic_periods for all using (public.is_admin(auth.uid()) or public.is_staff(auth.uid())) with check (public.is_admin(auth.uid()) or public.is_staff(auth.uid()));
 
 drop policy if exists "lookups_read" on public.lookups;
 drop policy if exists "lookups_write" on public.lookups;
 create policy "lookups_read" on public.lookups for select using (auth.role() = 'authenticated');
-create policy "lookups_write" on public.lookups for all using (public.is_admin(auth.uid())) with check (public.is_admin(auth.uid()));
+create policy "lookups_write" on public.lookups for all using (public.is_admin(auth.uid()) or public.is_staff(auth.uid())) with check (public.is_admin(auth.uid()) or public.is_staff(auth.uid()));
 
 -- ---- Parent-child ----
 drop policy if exists "pc_read"  on public.parent_child;

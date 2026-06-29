@@ -185,7 +185,7 @@ returns boolean language sql security definer stable as $$
     select 1 from public.profiles
     where id = uid
       and role in ('admin','principal','proprietor','head_teacher','staff','bursar')
-      and status = 'approved'
+      and status in ('approved','active')
   );
 $$;
 

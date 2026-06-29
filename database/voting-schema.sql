@@ -41,7 +41,7 @@ create table if not exists public.profiles (
   role text not null default 'student'
     check (role in ('admin','principal','proprietor','head_teacher','staff','parent','student','bursar')),
   status text not null default 'pending'
-    check (status in ('pending','approved','suspended')),
+    check (status in ('pending','approved','active','suspended')),
   photo_url text,
   campus text,
   created_at timestamptz not null default now(),
@@ -56,7 +56,7 @@ returns boolean language sql security definer stable as $$
     select 1 from public.profiles
     where id = uid
       and role in ('admin','principal','proprietor','head_teacher','staff','bursar')
-      and status = 'approved'
+      and status in ('approved','active')
   );
 $$;
 
